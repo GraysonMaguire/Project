@@ -23,12 +23,11 @@ class Display(object):
         return data
 
     def postitionPlot(self):
-        data = self.readData()
-        print('data amount', len(data[0][0]))
+        data = self.P
         for i in range(len(self.M)):
             x = data[i][0]
             y = data[i][1]
-            print(self.P[i], self.P[i][1])
+
             plt.plot(x, y, label=str(i))
 
         plt.xlabel("x")

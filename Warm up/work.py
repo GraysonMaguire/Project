@@ -55,6 +55,19 @@ class Work(object):
         fullStep = dPrev + v * self.dt
         return fullStep, halfStep
 
+    def reshapeData(self, data):
+        totalSteps = len(data)
+        Dimensions = 3
+        totalParticles = len(data[0])
+
+        newData = np.zeros((totalParticles, Dimensions, totalSteps))
+
+        for i in range(totalSteps):
+            for j in range(Dimensions):
+                for k in range(totalParticles):
+                    newData[k][j][i] = data[i][k][j]
+        return newData
+
     def numberCruncher(self):
         print('beginning crunch')
         iterations = int(self.t / self.dt)
@@ -62,22 +75,23 @@ class Work(object):
         V = self.V0
         M = self.M
 
-        dataP = np.full(
+        rawP = np.full(
             (iterations, len(M), 3), 0.0)
-        dataV = np.full(
+        rawV = np.full(
             (iterations, len(M), 3), 0.0)
-        dataF = np.full(
+        rawF = np.full(
             (iterations, len(M), 3), 0.0)
-        dataV[0], dataP[0] = V, P
+        rawV[0], rawP[0] = V, P
 
         for i in range(iterations):
 
-            dataF[i] = self.calcForceOnParticles(dataP[i], M)
+            rawF[i] = self.calcForceOnParticles(rawP[i], M)
 
             if i == iterations - 1:
                 break
 
-            dataV[i + 1] = self.calcNextVelocity(dataV[i], dataF[i], M)
-            dataP[i + 1], PHalf = self.calcNextPosition(dataP[i], dataV[i + 1])
-        print('crunch over')
-        return(dataP, dataV, dataF)
+            rawV[i + 1] = self.calcNextVelocity(rawV[i], rawF[i], M)
+            rawP[i + 1], PHalf = self.calcNextPosition(rawP[i], rawV[i + 1])
+        print('crunch over, finalising data...')
+
+        return(self.reshapeData(rawP), self.reshapeData(rawV), self.reshapeData(rawF))
