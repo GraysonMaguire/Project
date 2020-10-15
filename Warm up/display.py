@@ -42,11 +42,12 @@ class Display(object):
 
     def xyPostitionPlot(self, axis):
         data = self.P
+        labels = ['Sun', 'Earth', 'Jupiter']
         for i in range(len(self.M)):
             x = data[i][0]
             y = data[i][1]
 
-            axis.plot(x, y, label=str(i))
+            axis.plot(x, y, label=labels[i])
 
         axis.set_xlabel("x")
         axis.set_ylabel("y")
