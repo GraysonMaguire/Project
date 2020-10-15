@@ -8,21 +8,41 @@ workTest = Work(data.P0, data.V0, data.t, data.dt, data.M)
 # test gForce
 
 # test calcForceOnParticles
+# print(workTest.calcForceOnParticles(data.P0, data.M))
 
-#print(workTest.calcForceOnParticles(data.P0, data.M))
 # test calcNextPosition
-#P, Phalf = workTest.calcNextPosition(data.P0, data.V0)
-# test calcNextVelocity
+# P, Phalf = workTest.calcNextPosition(data.P0, data.V0)
 
+# test calcNextVelocity
 # print(workTest.calcNextVelocity(
 #     data.V0, workTest.calcForceOnParticles(data.P0, data.M), data.M))
+
+# test calcCOM
+# com = workTest.calcCOM(data.P0, data.M)
+# print(com)
+
+# # test calcPE
+# pe = workTest.calcPE(
+#     data.P0, data.M, workTest.calcForceOnParticles(data.P0, data.M))
+
+# test calcKE
+# ke = workTest.calcKE(data.V0, data.M)
+# print(ke)
+
+# def otherCalc():
+#     p = data.P0
+#     M = data.M
+#     PE = -workTest.G * M[0] * M[1] / (np.linalg.norm(p[0] - p[1]))
+#     return PE
+# print(otherCalc() / (pe[0] + pe[1]))
+
 # test numberCruncher
-P, V, F = workTest.numberCruncher()
+P, V, F, E = workTest.numberCruncher()
 
-print('dataP', P)
 
-display = Display(P, V, F, data.t, data.dt, data.M)
-display.postitionPlot()
+display = Display(P, E, data.t, data.dt, data.M)
+# display.energyPlot()
+display.display()
 
 # dataP = np.full(
 #     (10, len(data.M), 3), 0.0)

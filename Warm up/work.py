@@ -1,14 +1,8 @@
 # imports
 import numpy as np
-from init import data
+from tqdm import tqdm
 # verbose functions
 normal = np.linalg.norm
-# global variables
-epsilon = np.array([0, 0, 0])
-G = 6.674e-11
-N = data.N
-
-# functions
 
 
 class Work(object):
@@ -19,7 +13,7 @@ class Work(object):
         self.dt = dt
         self.M = M
         self.G = 6.674e-11
-        self.epsilon = 0.1
+        self.epsilon = 0
 
     def gForce(self, m1, m2, r1, r2):
         force = -m1 * m2 * self.G * \
@@ -51,9 +45,38 @@ class Work(object):
         return nextVels
 
     def calcNextPosition(self, dPrev, v):
-        halfStep = dPrev + v * self.dt / 2
+        halfStep = dPrev + v * (self.dt / 2)
         fullStep = dPrev + v * self.dt
-        return fullStep, halfStep
+        return (fullStep, halfStep)
+
+    def calcCOM(self, P, M):
+        sumMR = np.zeros(3)
+        sumM = 0
+        for i in range(len(M)):
+            sumM += M[i]
+            sumMR += M[i] * P[i]
+        return(sumMR / sumM)
+
+    def calcKE(self, V, M):
+        ke = 0
+        for i in range(len(M)):
+            ke += 0.5 * M[i] * normal(V[i])**2
+        return(ke)
+        # return(normal(0.5 * M[:, np.newaxis] * V**2))
+
+    def calcPE(self, P, M, F):
+        com = self.calcCOM(P, M)
+        PE = np.zeros(len(M))
+        for i in range(len(M)):
+            r = -com + P[i]
+            PE[i] = np.dot(F[i], r)
+        return(np.sum(PE))
+
+    def calcEnergies(self, P, F, V):
+        PE = self.calcPE(P, self.M, F)
+        KE = self.calcKE(V, self.M)
+        T = KE + PE
+        return([T, KE, PE])
 
     def reshapeData(self, data):
         totalSteps = len(data)
@@ -62,7 +85,7 @@ class Work(object):
 
         newData = np.zeros((totalParticles, Dimensions, totalSteps))
 
-        for i in range(totalSteps):
+        for i in tqdm(range(totalSteps)):
             for j in range(Dimensions):
                 for k in range(totalParticles):
                     newData[k][j][i] = data[i][k][j]
@@ -74,6 +97,7 @@ class Work(object):
         P = self.P0
         V = self.V0
         M = self.M
+        pHalf = P
 
         rawP = np.full(
             (iterations, len(M), 3), 0.0)
@@ -81,17 +105,22 @@ class Work(object):
             (iterations, len(M), 3), 0.0)
         rawF = np.full(
             (iterations, len(M), 3), 0.0)
-        rawV[0], rawP[0] = V, P
-
-        for i in range(iterations):
+        PHalf = np.full(
+            (iterations, len(M), 3), 0.0)
+        Energies = np.zeros((3, iterations))
+        rawV[0], rawP[0], PHalf[0] = V, P, pHalf
+        for i in tqdm(range(iterations)):
 
             rawF[i] = self.calcForceOnParticles(rawP[i], M)
-
+            Energies[0][i], Energies[1][i], Energies[2][i] = self.calcEnergies(
+                PHalf[i], rawF[i], rawV[i])
             if i == iterations - 1:
                 break
 
             rawV[i + 1] = self.calcNextVelocity(rawV[i], rawF[i], M)
-            rawP[i + 1], PHalf = self.calcNextPosition(rawP[i], rawV[i + 1])
-        print('crunch over, finalising data...')
 
-        return(self.reshapeData(rawP), self.reshapeData(rawV), self.reshapeData(rawF))
+            rawP[i + 1], PHalf[i +
+                               1] = self.calcNextPosition(rawP[i], rawV[i + 1])
+        print('crunch over, finalising data...')
+        print('compare', PHalf, 'next', rawP)
+        return(self.reshapeData(rawP), rawV, rawF, Energies)
