@@ -1,9 +1,8 @@
 import numpy as np
 from display import Display
 from work import Work
-from init import data
+from init import Data
 
-workTest = Work(data.P0, data.V0, data.t, data.dt, data.M)
 
 # test gForce
 
@@ -37,10 +36,10 @@ workTest = Work(data.P0, data.V0, data.t, data.dt, data.M)
 # print(otherCalc() / (pe[0] + pe[1]))
 
 # test numberCruncher
-P, V, F, E = workTest.numberCruncher()
-
-display = Display(P, E, data.t, data.dt, data.M)
-display.display()
+# P, V, F, E = workTest.numberCruncher()
+#
+# display = Display(P, E, data.t, data.dt, data.M)
+# display.display()
 
 # dataP = np.full(
 #     (10, len(data.M), 3), 0.0)
@@ -48,3 +47,6 @@ display.display()
 # print(dataP)
 # print('next', P)
 # print(dataP[1])
+
+# test data
+data = Data(R=100000, N=10, m=100, t=1, dt=3600, epsilon=0)
