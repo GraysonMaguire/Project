@@ -13,7 +13,7 @@ class Work(object):
         self.dt = dt
         self.M = M
         self.G = 6.674e-11
-        self.epsilon = 0
+        self.epsilon = 0.1
 
     def gForce(self, m1, m2, r1, r2):
         force = -m1 * m2 * self.G * \
@@ -36,12 +36,14 @@ class Work(object):
         return forces
 
     def nextVelocity(self, vPrev, f, m):
-        return vPrev + f * self.dt / m
+        a = f * (1 / m)
+        return vPrev + (a * self.dt)
 
     def calcNextVelocity(self, VPrev, F, M):
         nextVels = np.full_like(VPrev, 0.0)
         for i in range(len(M)):
             nextVels[i] = self.nextVelocity(VPrev[i], F[i], M[i])
+            # print(i, VPrev[i], nextVels[i], F[i])
         return nextVels
 
     def calcNextPosition(self, dPrev, v):

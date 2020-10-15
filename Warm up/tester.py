@@ -38,8 +38,7 @@ workTest = Work(data.P0, data.V0, data.t, data.dt, data.M)
 
 # test numberCruncher
 P, V, F, E = workTest.numberCruncher()
-print('forces', F)
-print('vel', V)
+
 display = Display(P, E, data.t, data.dt, data.M)
 display.display()
 

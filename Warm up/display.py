@@ -59,8 +59,12 @@ class Display(object):
 
     def distanceBetween(self, axis):
         R = np.zeros(len(self.P[0][0]))
+
         for i in range(len(self.P[0][0])):
-            R[i] = ((self.P[0][0][i])**2 + (self.P[0][1][i])**2)**0.5
+
+            R[i] = ((self.P[0][0][i] - self.P[1][0][i])**2 +
+                    (self.P[0][1][i] - self.P[1][1][i])**2)**0.5
+
         time = range(0, self.t, self.dt)
         axis.plot(time, R)
         axis.set_xlabel("time/t")
