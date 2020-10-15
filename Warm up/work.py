@@ -122,5 +122,5 @@ class Work(object):
             rawP[i + 1], PHalf[i +
                                1] = self.calcNextPosition(rawP[i], rawV[i + 1])
         print('crunch over, finalising data...')
-        print('compare', PHalf, 'next', rawP)
+
         return(self.reshapeData(rawP), rawV, rawF, Energies)

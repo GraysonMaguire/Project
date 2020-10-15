@@ -13,9 +13,9 @@ workTest = Work(data.P0, data.V0, data.t, data.dt, data.M)
 # test calcNextPosition
 # P, Phalf = workTest.calcNextPosition(data.P0, data.V0)
 
-# test calcNextVelocity
-# print(workTest.calcNextVelocity(
-#     data.V0, workTest.calcForceOnParticles(data.P0, data.M), data.M))
+# # test calcNextVelocity
+# workTest.calcNextVelocity(
+#     data.V0, workTest.calcForceOnParticles(data.P0, data.M), data.M)
 
 # test calcCOM
 # com = workTest.calcCOM(data.P0, data.M)
@@ -38,10 +38,9 @@ workTest = Work(data.P0, data.V0, data.t, data.dt, data.M)
 
 # test numberCruncher
 P, V, F, E = workTest.numberCruncher()
-
-
+print('forces', F)
+print('vel', V)
 display = Display(P, E, data.t, data.dt, data.M)
-# display.energyPlot()
 display.display()
 
 # dataP = np.full(
