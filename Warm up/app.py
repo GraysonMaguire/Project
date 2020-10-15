@@ -15,6 +15,7 @@ epsilon = 0
 
 
 def App():
+    print('master')
     data = Data(V, P, M, t, dt, epsilon)
 
     worker = Work(data.P0, data.V0, data.t, data.dt, data.M, data.epsilon)
