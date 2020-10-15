@@ -6,14 +6,14 @@ normal = np.linalg.norm
 
 
 class Work(object):
-    def __init__(self, P0, V0, t, dt, M):
+    def __init__(self, P0, V0, t, dt, M, epsilon):
         self.P0 = P0
         self.V0 = V0
         self.t = t
         self.dt = dt
         self.M = M
+        self.epsilon = epsilon
         self.G = 6.674e-11
-        self.epsilon = 0.1
 
     def gForce(self, m1, m2, r1, r2):
         force = -m1 * m2 * self.G * \
