@@ -4,12 +4,13 @@ import numpy as np
 
 class Display(object):
 
-    def __init__(self, P, E, t, dt, M):
+    def __init__(self, P, E, t, dt, M, steps):
         self.P = P
         self.E = E
         self.t = t
         self.dt = dt
         self.M = M
+        self.steps = steps
 
     def energyPlot(self, axis):
         T, KE, PE = self.E
@@ -41,13 +42,15 @@ class Display(object):
         return axis
 
     def xyPostitionPlot(self, axis):
-        data = self.P
-        labels = ['Sun', 'Earth', 'Jupiter']
-        for i in range(len(self.M)):
-            x = data[i][0]
-            y = data[i][1]
 
-            axis.plot(x, y, label=labels[i])
+        dataX = self.P[0]
+        dataY = self.P[1]
+
+        for i in range(len(dataX)):
+            x = dataX[i]
+            y = dataY[i]
+
+            axis.scatter(x, y, label=('step: ' + str(i)))
 
         axis.set_xlabel("x")
         axis.set_ylabel("y")
@@ -58,29 +61,10 @@ class Display(object):
         axis.legend()
         return axis
 
-    def distanceBetween(self, axis):
-        R = np.zeros(len(self.P[0][0]))
-
-        for i in range(len(self.P[0][0])):
-
-            R[i] = ((self.P[0][0][i] - self.P[1][0][i])**2 +
-                    (self.P[0][1][i] - self.P[1][1][i])**2)**0.5
-
-        time = range(0, self.t, self.dt)
-        axis.plot(time, R)
-        axis.set_xlabel("time/t")
-        axis.set_ylabel("ditance/m")
-        axis.set_title(
-            "distance between")
-        axis.set_xlim()
-        axis.set_ylim()
-
-        return axis
-
     def display(self):
         fig, axis = plt.subplots(2, 2)
         self.xyPostitionPlot(axis[0, 0])
-        self.distanceBetween(axis[0, 1])
+        self.xyPostitionPlot(axis[0, 1])
         self.energyPlot(axis[1, 0])
         self.energyPercentagePlot(axis[1, 1])
         plt.show()

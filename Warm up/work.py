@@ -6,12 +6,13 @@ normal = np.linalg.norm
 
 
 class Work(object):
-    def __init__(self, P0, V0, t, dt, M, epsilon):
+    def __init__(self, P0, V0, t, dt, M, steps, epsilon):
         self.P0 = P0
         self.V0 = V0
         self.t = t
         self.dt = dt
         self.M = M
+        self.steps = steps
         self.epsilon = epsilon
         self.G = 6.674e-11
 
@@ -85,17 +86,19 @@ class Work(object):
         Dimensions = 3
         totalParticles = len(data[0])
 
-        newData = np.zeros((totalParticles, Dimensions, totalSteps))
-
-        for i in tqdm(range(totalSteps)):
+        newData = np.zeros((3, self.steps, totalParticles))
+        step = 0
+        for i in tqdm(range(0, totalSteps, int(totalSteps / self.steps))):
             for j in range(Dimensions):
                 for k in range(totalParticles):
-                    newData[k][j][i] = data[i][k][j]
+                    newData[j][step][k] = data[i][k][j]
+                    ++step
         return newData
 
     def numberCruncher(self):
         print('beginning crunch')
         iterations = int(self.t / self.dt)
+        print('iter', self.t / self.dt)
         P = self.P0
         V = self.V0
         M = self.M
@@ -110,6 +113,7 @@ class Work(object):
         PHalf = np.full(
             (iterations, len(M), 3), 0.0)
         Energies = np.zeros((3, iterations))
+
         rawV[0], rawP[0], PHalf[0] = V, P, pHalf
         for i in tqdm(range(iterations)):
 

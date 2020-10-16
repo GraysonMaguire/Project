@@ -3,7 +3,18 @@ from display import Display
 from work import Work
 from init import Data
 
+data = Data(R=10000, N=10, m=10000, t=3600 * 60, dt=1, steps=60, epsilon=1000)
 
+worker = Work(data.P0, data.V0, data.t, data.dt,
+              data.M, data.steps, data.epsilon)
+
+P, V, F, E = worker.numberCruncher()
+display = Display(P, E, data.t, data.dt, data.M, data.steps)
+display.display()
+
+# r = range(0, 3600, int(3600 / 60))
+# for i in r:
+#     print(i)
 # test gForce
 
 # test calcForceOnParticles
@@ -36,7 +47,8 @@ from init import Data
 # print(otherCalc() / (pe[0] + pe[1]))
 
 # test numberCruncher
-# P, V, F, E = workTest.numberCruncher()
+
+
 #
 # display = Display(P, E, data.t, data.dt, data.M)
 # display.display()
@@ -49,4 +61,4 @@ from init import Data
 # print(dataP[1])
 
 # test data
-data = Data(R=100000, N=10, m=100, t=1, dt=3600, epsilon=0)
+#data = Data(R=100000, N=10, m=100, t=1, dt=3600, epsilon=0)

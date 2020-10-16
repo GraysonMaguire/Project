@@ -4,13 +4,14 @@ normal = np.linalg.norm
 
 class Data(object):
 
-    def __init__(self, R, N, m, t, dt, epsilon):
+    def __init__(self, R, N, m, t, dt, steps, epsilon):
         P0 = self.generateP0(R, N)
         self.V0 = np.zeros((N, 3))
         self.P0 = P0
         self.M = np.full(N, m)
         self.t = t
         self.dt = dt
+        self.steps = steps
         self.epsilon = epsilon
 
     def spherToCart(self, r, theta, phi):
