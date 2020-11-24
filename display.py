@@ -1,5 +1,10 @@
 from matplotlib import pyplot as plt
 import numpy as np
+font = {'family': 'normal',
+        'weight': 'bold',
+        'size': 15}
+
+plt.rc('font', **font)
 
 
 class Display(object):
@@ -7,19 +12,27 @@ class Display(object):
     def __init__(self, P, E, t, dt, M):
         self.P = P
         self.E = E
-        self.t = t
+        self.t = int(t)
         self.dt = dt
         self.M = M
+        self.year = 365 * 24 * 3600
+        self.au = 149597871000
+        self.orbitLabels = [0, 20, 40, 60, 80, 100]
 
     def energyPlot(self, axis):
         T, KE, PE = self.E
         time = range(0, self.t, self.dt)
+        orbits = range(0, self.t + 20 * self.year, 20 * self.year)
+
         axis.plot(time, T, label='Total Energy')
         axis.plot(time, KE, label='Kinetic Energy')
         axis.plot(time, PE, label='Potential Energy')
 
         axis.set_ylabel("Energy/J")
         axis.set_xlabel("time/s")
+        axis.set_xticks(orbits)
+        axis.set_xticklabels(self.orbitLabels)
+        axis.set_xlim(0, 100 * self.year)
         axis.set_title(
             "Energies")
 
@@ -30,30 +43,41 @@ class Display(object):
         T = self.E[0]
         TPercent = 100 * T / T[0]
         time = range(0, self.t, self.dt)
+        orbits = range(0, self.t + 20 * self.year, 20 * self.year)
 
         axis.plot(time, TPercent)
-        axis.set_ylabel("% of initial Total energy")
-        axis.set_xlabel("time/s")
+        axis.set_ylabel("Total energy/%")
+        axis.set_xlabel("Orbits")
         axis.set_title(
             "% of total energy")
-        axis.set_xlim()
-        axis.set_ylim(95, 105)
+        axis.set_xticks(orbits)
+        axis.set_xticklabels(self.orbitLabels)
+        axis.set_xlim(0, 100 * self.year)
+        axis.set_ylim(99.5, 100.5)
         return axis
 
     def xyPostitionPlot(self, axis):
         data = self.P
         labels = ['Sun', 'Earth', 'Jupiter']
+        colors = ['orange', 'blue', 'grey']
         for i in range(len(self.M)):
             x = data[i][0]
             y = data[i][1]
 
-            axis.plot(x, y, label=labels[i])
-
-        axis.set_xlabel("x")
-        axis.set_ylabel("y")
+            axis.plot(x, y, label=labels[i], color=colors[i])
+        orbits = range(0, self.t + 20 * self.year, 20 * self.year)
+        ticks = [-5 * self.au, -4 * self.au, -3 * self.au, -2 *
+                 self.au, -self.au, 0, self.au, 2 * self.au, 3 * self.au, 4 * self.au, 5 * self.au]
+        labels = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]
+        axis.set_xlabel("x/AU")
+        axis.set_ylabel("y/AU")
         axis.set_title(
             "position")
         axis.set_xlim()
+        axis.set_yticks(ticks)
+        axis.set_yticklabels(labels)
+        axis.set_xticks(ticks)
+        axis.set_xticklabels(labels)
         axis.set_ylim()
         axis.legend()
         return axis
@@ -67,17 +91,25 @@ class Display(object):
                     (self.P[0][1][i] - self.P[1][1][i])**2)**0.5
 
         time = range(0, self.t, self.dt)
+        orbits = range(0, self.t + 20 * self.year, 20 * self.year)
+
         axis.plot(time, R)
         axis.set_xlabel("time/t")
-        axis.set_ylabel("ditance/m")
+        axis.set_ylabel("ditance/Au")
         axis.set_title(
             "distance between")
-        axis.set_xlim()
+        axis.set_xticks(orbits)
+        axis.set_xticklabels(self.orbitLabels)
+        axis.set_yticks([0.9 * self.au, 0.95 * self.au,
+                         self.au, 1.05 * self.au, 1.1 * self.au, 1.15 * self.au])
+        axis.set_yticklabels([0.90, 0.95, 1.00, 1.05, 1.10, 1.15])
+        axis.set_xlim(0, 100 * self.year)
         axis.set_ylim()
 
         return axis
 
     def display(self):
+
         fig, axis = plt.subplots(2, 2)
         self.xyPostitionPlot(axis[0, 0])
         self.distanceBetween(axis[0, 1])
