@@ -3,14 +3,19 @@ from display import Display
 from work import Work
 from init import Data
 
-data = Data(R=10000, N=10, m=10000, t=3600 * 60, dt=1, steps=60, epsilon=1000)
+P0 = np.array([[1, 0, 0], [-1, 0, 0]])
+V0 = np.array([[-1, 0, 0], [1, 0, 0]])
+t = 5
+dt = 1
+M = np.array([1, 1])
+steps = 5,
+epsilon = 0
 
-worker = Work(data.P0, data.V0, data.t, data.dt,
-              data.M, data.steps, data.epsilon)
+worker = Work(P0, V0, t, dt, M, steps, epsilon)
 
-P, V, F, E = worker.numberCruncher()
-display = Display(P, E, data.t, data.dt, data.M, data.steps)
-display.display()
+# P, V, F, E = worker.numberCruncher()
+
+print(worker.numberCruncher())
 
 # r = range(0, 3600, int(3600 / 60))
 # for i in r:

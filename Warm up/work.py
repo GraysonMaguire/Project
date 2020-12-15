@@ -15,7 +15,12 @@ class Work(object):
         self.steps = steps
         self.epsilon = epsilon
         self.G = 6.674e-11
-
+    def checkForCollision(self,P):
+        for i in range(len(P)):
+            for j in range(len(P)):
+                if i=j: next
+                    pass
+        return()
     def gForce(self, m1, m2, r1, r2):
         force = -m1 * m2 * self.G * \
             ((r1 - r2) / (normal(r1 - r2)**2 + self.epsilon**2)**1.5)
@@ -98,7 +103,7 @@ class Work(object):
     def numberCruncher(self):
         print('beginning crunch')
         iterations = int(self.t / self.dt)
-        print('iter', self.t / self.dt)
+        print('iterations', self.t / self.dt)
         P = self.P0
         V = self.V0
         M = self.M
@@ -129,4 +134,4 @@ class Work(object):
                                1] = self.calcNextPosition(rawP[i], rawV[i + 1])
         print('crunch over, finalising data...')
 
-        return(self.reshapeData(rawP), rawV, rawF, Energies)
+        return(rawP, rawV, rawF, Energies)
