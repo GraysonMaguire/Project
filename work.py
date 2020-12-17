@@ -6,7 +6,7 @@ normal = np.linalg.norm
 
 
 class Work(object):
-    def __init__(self, P0, V0, t, dt, M, steps, epsilon):
+    def __init__(self, P0, V0, t, dt, M, steps, epsilon, colRad):
         self.P0 = P0
         self.V0 = V0
         self.t = t
@@ -15,19 +15,14 @@ class Work(object):
         self.steps = steps
         self.epsilon = epsilon
         self.G = 6.674e-11
-    def checkForCollision(self,P):
-        for i in range(len(P)):
-            for j in range(len(P)):
-                if i=j: next
-                    pass
-        return()
+        self.colRad = colRad
+
     def gForce(self, m1, m2, r1, r2):
         force = -m1 * m2 * self.G * \
             ((r1 - r2) / (normal(r1 - r2)**2 + self.epsilon**2)**1.5)
         return (force)
 
     def calcForceOnParticles(self, P, M):
-
         forces = np.full((len(P), 3), 0.0)
         y = 0
         x = 1
@@ -49,7 +44,7 @@ class Work(object):
         nextVels = np.full_like(VPrev, 0.0)
         for i in range(len(M)):
             nextVels[i] = self.nextVelocity(VPrev[i], F[i], M[i])
-            # print(i, VPrev[i], nextVels[i], F[i])
+
         return nextVels
 
     def calcNextPosition(self, dPrev, v):
@@ -65,12 +60,45 @@ class Work(object):
             sumMR += M[i] * P[i]
         return(sumMR / sumM)
 
+    def checkForCollision(self, P, M, V):
+        collisions = []
+        collision = []
+        save = 1
+        for p1 in P:
+            i = save
+            while i < len(P):
+                p2 = P[i]
+                if self.calcDistanceBetween(p1, p2) < self.colRad:
+                    index1 = self.indexOf(P, p1)
+                    index2 = self.indexOf(P, p2)
+                    if not(np.any(collision == index1)):
+                        collision.append(index1)
+                    collision.append(index2)
+
+                i += 1
+            if len(collision) != 0:
+                collisions.append(collision)
+                collision = []
+            save += 1
+        print(collisions)
+        # return (newP, newM, newV)
+
+    def handleCollision(self, M, V):
+        pass
+
+    def calcDistanceBetween(self, p1, p2):
+        return normal(p1 - p2)
+
+    def indexOf(self, Array, item):
+        for i in range(len(Array)):
+            if (Array[i] == item).all():
+                return i
+
     def calcKE(self, V, M):
         ke = 0
         for i in range(len(M)):
             ke += 0.5 * M[i] * normal(V[i])**2
         return(ke)
-        # return(normal(0.5 * M[:, np.newaxis] * V**2))
 
     def calcPE(self, P, M, F):
         com = self.calcCOM(P, M)
@@ -117,14 +145,12 @@ class Work(object):
             (iterations, len(M), 3), 0.0)
         PHalf = np.full(
             (iterations, len(M), 3), 0.0)
-        Energies = np.zeros((3, iterations))
 
         rawV[0], rawP[0], PHalf[0] = V, P, pHalf
         for i in tqdm(range(iterations)):
 
             rawF[i] = self.calcForceOnParticles(rawP[i], M)
-            Energies[0][i], Energies[1][i], Energies[2][i] = self.calcEnergies(
-                PHalf[i], rawF[i], rawV[i])
+
             if i == iterations - 1:
                 break
 
@@ -134,4 +160,4 @@ class Work(object):
                                1] = self.calcNextPosition(rawP[i], rawV[i + 1])
         print('crunch over, finalising data...')
 
-        return(rawP, rawV, rawF, Energies)
+        return(rawP, rawV, rawF)

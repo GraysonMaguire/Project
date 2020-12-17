@@ -16,13 +16,14 @@ epsilon = 0
 
 def App():
 
-    data = Data(V, P, M, t, dt, epsilon)
-
-    worker = Work(data.P0, data.V0, data.t, data.dt, data.M, data.epsilon)
-    Positions, Velocitys, Forces, Energys = worker.numberCruncher()
-
-    display = Display(Positions, Energys, data.t, data.dt, data.M)
-    display.display()
+    print('hello world')
+# data = Data(V, P, M, t, dt, epsilon)
+#
+# worker = Work(data.P0, data.V0, data.t, data.dt, data.M, data.epsilon)
+# Positions, Velocitys, Forces, Energys = worker.numberCruncher()
+#
+# display = Display(Positions, Energys, data.t, data.dt, data.M)
+# display.display()
 
 
 App()
