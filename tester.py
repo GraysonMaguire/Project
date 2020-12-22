@@ -3,11 +3,11 @@ from display import Display
 from work import Work
 from init import Data
 
-P0 = np.array([[5, 0, 0], [0, 5, 0]])
-V0 = np.array([[-1, 0, 0], [0, -1, 0]])
+P0 = np.array([[5, 0, 0], [0, 5, 0], [-5, 0, 0], [0, -5, 0]])
+V0 = np.array([[-1, 0, 0], [0, -1, 0], [1, 0, 0], [0, 1, 0]])
 t = 10
 dt = 1
-M = np.array([1, 1])
+M = np.array([1, 1, 1, 3])
 steps = 1
 epsilon = 0
 colRad = 1
