@@ -90,6 +90,7 @@ class Work(object):
                 if self.calcDistanceBetween(p1, p2) < self.colRad:
                     index1 = self.indexOf(P, p1)
                     index2 = self.indexOf(P, p2)
+                    print('collision', index1, index2)
                     newM, newV, newP = self.handleCollision(
                         newM, newV, newP, [index1, index2])
 
