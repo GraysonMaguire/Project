@@ -3,12 +3,12 @@ from display import Display
 from work import Work
 from init import Data
 
-P0 = np.array([[5, 0, 0], [-5, 0, 0]])
-V0 = np.array([[-1, 0, 0], [1, 0, 0]])
+P0 = np.array([[5, 0, 0], [0, 5, 0]])
+V0 = np.array([[-1, 0, 0], [0, -1, 0]])
 t = 10
 dt = 1
 M = np.array([1, 1])
-steps = 10,
+steps = 1
 epsilon = 0
 colRad = 1
 
@@ -16,7 +16,9 @@ colRad = 1
 worker = Work(P0, V0, t, dt, M, steps, epsilon, colRad)
 # worker.checkForCollision(P0, M, V0)
 newP, newV, newF = worker.numberCruncher()
-graph = Display(newP, 0, t, dt, M, steps)
+
+graph = Display(newP, 0, t, dt, M)
+print(newP)
 graph.display()
 # print('Fs:', newF)
 # print('Ps:', newP)

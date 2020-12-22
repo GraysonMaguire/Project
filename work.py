@@ -155,17 +155,17 @@ class Work(object):
         return([T, KE, PE])
 
     def reshapeData(self, data):
-        totalSteps = len(data)
+        totalSteps = int(self.t / self.dt)
         Dimensions = 3
-        totalParticles = len(data[0])
+        totalParticles = len(self.M)
 
-        newData = np.zeros((3, self.steps, totalParticles))
-        step = 0
-        for i in tqdm(range(0, totalSteps, int(totalSteps / self.steps))):
+        newData = np.full((totalParticles, Dimensions, totalSteps), 0.0)
+
+        for i in tqdm(range(totalSteps)):
             for j in range(Dimensions):
                 for k in range(totalParticles):
-                    newData[j][step][k] = data[i][k][j]
-                    ++step
+                    newData[k][j][i] = data[i][k][j]
+
         return newData
 
     def numberCruncher(self):
@@ -201,5 +201,5 @@ class Work(object):
                                1] = self.calcNextPosition(rawP[i], rawV[i + 1])
 
         print('crunch over, finalising data...')
-
-        return(rawP, rawV, rawF)
+        print(rawP)
+        return(self.reshapeData(rawP), rawV, rawF)
