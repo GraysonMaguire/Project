@@ -64,7 +64,4 @@ class Display(object):
     def display(self):
         fig, axis = plt.subplots(2, 2)
         self.xyPostitionPlot(axis[0, 0])
-        self.xyPostitionPlot(axis[0, 1])
-        self.energyPlot(axis[1, 0])
-        self.energyPercentagePlot(axis[1, 1])
         plt.show()

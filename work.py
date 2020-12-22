@@ -27,6 +27,10 @@ class Work(object):
         y = 0
         x = 1
         for i in range(len(P) - 1):
+            if M[i] == 0:
+                y += 1
+                x = y + 1
+                continue
             while x < len(P):
                 force = self.gForce(M[x], M[y], P[x], P[y])
                 forces[x] += force
@@ -43,6 +47,9 @@ class Work(object):
     def calcNextVelocity(self, VPrev, F, M):
         nextVels = np.full_like(VPrev, 0.0)
         for i in range(len(M)):
+            if M[i] == 0:
+                nextVels[i] = VPrev[i]
+                continue
             nextVels[i] = self.nextVelocity(VPrev[i], F[i], M[i])
 
         return nextVels
@@ -70,8 +77,14 @@ class Work(object):
 
         i = 0
         while i < len(newM):
+            if newM[i] == 0:
+                i += 1
+                continue
             j = i + 1
             while j < len(P):
+                if newM[j] == 0:
+                    j += 1
+                    continue
                 p1 = P[i]
                 p2 = P[j]
                 if self.calcDistanceBetween(p1, p2) < self.colRad:
@@ -101,12 +114,17 @@ class Work(object):
         newVelcoity = newMomentum / newMass
         M[primary] = newMass
         V[primary] = newVelcoity
+        M[secondary] = 0
+        V[secondary] = 0
+        # P[secondary] = 0
+        # in final release this will be changed back
+        # to original but for testting this makes most sense
 
-        newM = np.delete(M, secondary, axis=0)
-        newV = np.delete(V, secondary, axis=0)
-        newP = np.delete(P, secondary, axis=0)
+        # newM = np.delete(M, secondary, axis=0)
+        # newV = np.delete(V, secondary, axis=0)
+        # newP = np.delete(P, secondary, axis=0)
 
-        return (newM, newV, newP)
+        return (M, V, P)
 
     def calcDistanceBetween(self, p1, p2):
         return normal(p1 - p2)
@@ -170,7 +188,8 @@ class Work(object):
 
         rawV[0], rawP[0], PHalf[0] = V, P, pHalf
         for i in tqdm(range(iterations)):
-
+            rawP[i], M, rawV[i] = self.checkForCollision(
+                rawP[i], M, rawV[i])
             rawF[i] = self.calcForceOnParticles(rawP[i], M)
 
             if i == iterations - 1:
@@ -180,6 +199,7 @@ class Work(object):
 
             rawP[i + 1], PHalf[i +
                                1] = self.calcNextPosition(rawP[i], rawV[i + 1])
+
         print('crunch over, finalising data...')
 
         return(rawP, rawV, rawF)
