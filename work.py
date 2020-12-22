@@ -201,5 +201,5 @@ class Work(object):
                                1] = self.calcNextPosition(rawP[i], rawV[i + 1])
 
         print('crunch over, finalising data...')
-        print(rawP)
+
         return(self.reshapeData(rawP), rawV, rawF)
