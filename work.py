@@ -60,31 +60,53 @@ class Work(object):
             sumMR += M[i] * P[i]
         return(sumMR / sumM)
 
+    def calcCollisions(self):
+        pass
+
     def checkForCollision(self, P, M, V):
-        collisions = []
-        collision = []
-        save = 1
-        for p1 in P:
-            i = save
-            while i < len(P):
-                p2 = P[i]
+        newP = P
+        newM = M
+        newV = V
+
+        i = 0
+        while i < len(newM):
+            j = i + 1
+            while j < len(P):
+                p1 = P[i]
+                p2 = P[j]
                 if self.calcDistanceBetween(p1, p2) < self.colRad:
                     index1 = self.indexOf(P, p1)
                     index2 = self.indexOf(P, p2)
-                    if not(np.any(collision == index1)):
-                        collision.append(index1)
-                    collision.append(index2)
+                    newM, newV, newP = self.handleCollision(
+                        newM, newV, newP, [index1, index2])
 
-                i += 1
-            if len(collision) != 0:
-                collisions.append(collision)
-                collision = []
-            save += 1
-        print(collisions)
-        # return (newP, newM, newV)
+                j += 1
+            i += 1
 
-    def handleCollision(self, M, V):
-        pass
+        return (newP, newM, newV)
+
+    def handleCollision(self, M, V, P, indexes):
+        if M[indexes[0]] > M[indexes[1]]:
+            primary = indexes[0]
+            secondary = indexes[1]
+        else:
+            primary = indexes[1]
+            secondary = indexes[0]
+
+        primaryMomentum = M[primary] * V[primary]
+        secondaryMomentum = M[secondary] * V[secondary]
+        newMomentum = primaryMomentum + secondaryMomentum
+
+        newMass = M[primary] + M[secondary]
+        newVelcoity = newMomentum / newMass
+        M[primary] = newMass
+        V[primary] = newVelcoity
+
+        newM = np.delete(M, secondary, axis=0)
+        newV = np.delete(V, secondary, axis=0)
+        newP = np.delete(P, secondary, axis=0)
+
+        return (newM, newV, newP)
 
     def calcDistanceBetween(self, p1, p2):
         return normal(p1 - p2)

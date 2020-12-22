@@ -3,8 +3,8 @@ from display import Display
 from work import Work
 from init import Data
 
-P0 = np.array([[1, 0, 0], [0.5, 0, 0], [-1, 0, 0], [1.1, 0, 0]])
-V0 = np.array([[-1, 0, 0], [1, 0, 0]])
+P0 = np.array([[1, 0, 0], [0.5, 0, 0]])
+V0 = np.array([[-1, 0, 0], [-1, 0, 0]])
 t = 5
 dt = 1
 M = np.array([1, 1])
@@ -14,7 +14,11 @@ colRad = 1
 
 
 worker = Work(P0, V0, t, dt, M, steps, epsilon, colRad)
-worker.checkForCollision(P0, M, V0)
+# worker.checkForCollision(P0, M, V0)
+newP, newM, newV = worker.checkForCollision(P0, M, V0)
+print('M:', newM)
+print('P:', newP)
+print('V:', newV)
 
 #
 # P, V, F, E = worker.numberCruncher()
@@ -70,4 +74,4 @@ worker.checkForCollision(P0, M, V0)
 # print(dataP[1])
 
 # test data
-#data = Data(R=100000, N=10, m=100, t=1, dt=3600, epsilon=0)
+# data = Data(R=100000, N=10, m=100, t=1, dt=3600, epsilon=0)
