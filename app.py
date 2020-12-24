@@ -2,6 +2,8 @@ import numpy as np
 from display import Display
 from work import Work
 from init import Data
+import os
+
 # constants
 G = 6.67e-11
 # initial data
@@ -26,7 +28,7 @@ def App():
 
     worker = Work(P0, V0, t, dt, M, epsilon, colRad)
     dataP, dataV, dataF = worker.numberCruncher()
-
+    # np.save('1', dataP)
     graph = Display(dataP, 0, t, dt, M, R)
     graph.xyAnimation()
 

@@ -171,6 +171,7 @@ class Work(object):
         V = self.V0
         M = self.M
         pHalf = P
+        print('duration: ', self.t / (60 * 60 * 24 * 365.25))
         print('iterations: ', iterations)
         print('number of particles: ', len(M))
 

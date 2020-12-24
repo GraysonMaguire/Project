@@ -44,23 +44,35 @@ class Display(object):
         ax.set_aspect('equal')
         ax.grid()
 
-        line, = ax.plot([], [], 'o', lw=2)
-        time_template = 'time = %.1fs'
+        particleLine, = ax.plot([], [], 'o', lw=2)
+        sunLine, = ax.plot([], [], 'o', lw=2, color='red')
+        time_template = 'time = %.1fyears'
         time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
 
-        def animate(i):
+        def animateSun(i):
+            thisx = self.P[0][0][i]
+            thisy = self.P[0][1][i]
+
+            sunLine.set_data(thisx, thisy)
+            time_text.set_text(time_template % (i * self.dt / self.year))
+
+            return sunLine, time_text
+
+        def animateParticles(i):
             thisx = []
             thisy = []
             for particle in self.P:
                 thisx.append(particle[0][i])
                 thisy.append(particle[1][i])
 
-            line.set_data(thisx, thisy)
-            time_text.set_text(time_template % (i * self.dt))
+            particleLine.set_data(thisx, thisy)
+            time_text.set_text(time_template % (i * self.dt / self.year))
 
-            return line, time_text
-        ani = animation.FuncAnimation(
-            fig, animate, int(self.t / self.dt), interval=100, blit=False)
+            return particleLine, time_text
+        aniSun = animation.FuncAnimation(
+            fig, animateSun, int(self.t / self.dt), interval=100, blit=False)
+        aniParticles = animation.FuncAnimation(
+            fig, animateParticles, int(self.t / self.dt), interval=100, blit=False)
 
         plt.show()
         pass
