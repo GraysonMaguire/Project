@@ -6,13 +6,12 @@ normal = np.linalg.norm
 
 
 class Work(object):
-    def __init__(self, P0, V0, t, dt, M, steps, epsilon, colRad):
+    def __init__(self, P0, V0, t, dt, M, epsilon, colRad, ):
         self.P0 = P0
         self.V0 = V0
         self.t = t
         self.dt = dt
         self.M = M
-        self.steps = steps
         self.epsilon = epsilon
         self.G = 6.674e-11
         self.colRad = colRad
@@ -66,9 +65,6 @@ class Work(object):
             sumM += M[i]
             sumMR += M[i] * P[i]
         return(sumMR / sumM)
-
-    def calcCollisions(self):
-        pass
 
     def checkForCollision(self, P, M, V):
         newP = P
@@ -170,13 +166,13 @@ class Work(object):
         return newData
 
     def numberCruncher(self):
-        print('beginning crunch')
         iterations = int(self.t / self.dt)
-        print('iterations', self.t / self.dt)
         P = self.P0
         V = self.V0
         M = self.M
         pHalf = P
+        print('iterations: ', iterations)
+        print('number of particles: ', len(M))
 
         rawP = np.full(
             (iterations, len(M), 3), 0.0)
@@ -188,6 +184,7 @@ class Work(object):
             (iterations, len(M), 3), 0.0)
 
         rawV[0], rawP[0], PHalf[0] = V, P, pHalf
+        print('beginning crunch')
         for i in tqdm(range(iterations)):
             rawP[i], M, rawV[i] = self.checkForCollision(
                 rawP[i], M, rawV[i])

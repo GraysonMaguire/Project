@@ -1,55 +1,20 @@
 from matplotlib import pyplot as plt
+from matplotlib import animation
 import numpy as np
 
 
 class Display(object):
 
-    def __init__(self, P, E, t, dt, M):
+    def __init__(self, P, E, t, dt, M, R):
         self.P = P
         self.E = E
         self.t = int(t)
         self.dt = dt
         self.M = M
+        self.R = R
         self.year = 365 * 24 * 3600
         self.au = 149597871000
         self.orbitLabels = [0, 20, 40, 60, 80, 100]
-
-    def energyPlot(self, axis):
-        T, KE, PE = self.E
-        time = range(0, self.t, self.dt)
-        orbits = range(0, self.t + 20 * self.year, 20 * self.year)
-
-        axis.plot(time, T, label='Total Energy')
-        axis.plot(time, KE, label='Kinetic Energy')
-        axis.plot(time, PE, label='Potential Energy')
-
-        axis.set_ylabel("Energy/J")
-        axis.set_xlabel("time/s")
-        axis.set_xticks(orbits)
-        axis.set_xticklabels(self.orbitLabels)
-        axis.set_xlim(0, 100 * self.year)
-        axis.set_title(
-            "Energies")
-
-        axis.legend()
-        return axis
-
-    def energyPercentagePlot(self, axis):
-        T = self.E[0]
-        TPercent = 100 * T / T[0]
-        time = range(0, self.t, self.dt)
-        orbits = range(0, self.t + 20 * self.year, 20 * self.year)
-
-        axis.plot(time, TPercent)
-        axis.set_ylabel("Total energy/%")
-        axis.set_xlabel("Orbits")
-        axis.set_title(
-            "% of total energy")
-        axis.set_xticks(orbits)
-        axis.set_xticklabels(self.orbitLabels)
-        axis.set_xlim(0, 100 * self.year)
-        axis.set_ylim(99.5, 100.5)
-        return axis
 
     def xyPostitionPlot(self, axis):
         data = self.P
@@ -70,31 +35,35 @@ class Display(object):
         axis.legend()
         return axis
 
-    def distanceBetween(self, axis):
-        R = np.zeros(len(self.P[0][0]))
+    def xyAnimation(self):
+        fig = plt.figure(figsize=(5, 4))
 
-        for i in range(len(self.P[0][0])):
+        lim = self.R * 10
+        ax = fig.add_subplot(111, autoscale_on=True,
+                             xlim=(-lim, lim), ylim=(-lim, lim))
+        ax.set_aspect('equal')
+        ax.grid()
 
-            R[i] = ((self.P[0][0][i] - self.P[1][0][i])**2 +
-                    (self.P[0][1][i] - self.P[1][1][i])**2)**0.5
+        line, = ax.plot([], [], 'o', lw=2)
+        time_template = 'time = %.1fs'
+        time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
 
-        time = range(0, self.t, self.dt)
-        orbits = range(0, self.t + 20 * self.year, 20 * self.year)
+        def animate(i):
+            thisx = []
+            thisy = []
+            for particle in self.P:
+                thisx.append(particle[0][i])
+                thisy.append(particle[1][i])
 
-        axis.plot(time, R)
-        axis.set_xlabel("time/t")
-        axis.set_ylabel("ditance/Au")
-        axis.set_title(
-            "distance between")
-        axis.set_xticks(orbits)
-        axis.set_xticklabels(self.orbitLabels)
-        axis.set_yticks([0.9 * self.au, 0.95 * self.au,
-                         self.au, 1.05 * self.au, 1.1 * self.au, 1.15 * self.au])
-        axis.set_yticklabels([0.90, 0.95, 1.00, 1.05, 1.10, 1.15])
-        axis.set_xlim(0, 100 * self.year)
-        axis.set_ylim()
+            line.set_data(thisx, thisy)
+            time_text.set_text(time_template % (i * self.dt))
 
-        return axis
+            return line, time_text
+        ani = animation.FuncAnimation(
+            fig, animate, int(self.t / self.dt), interval=100, blit=False)
+
+        plt.show()
+        pass
 
     def display(self):
 

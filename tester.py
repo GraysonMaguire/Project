@@ -5,23 +5,29 @@ from init import Data
 
 
 P0 = np.array(
-    [[0.0, 0.0, 0.0], [1.4960e11, 0.0, 0.0], [-7.7854e11, 0.0, 0.0]])
-V0 = np.array([[0.0, 0.0, 0.0], [0.0, 29780, 0.0], [0.0, -13070, 0.0]])
-t = 100 * 370 * 24 * 60 * 60
+    [[0.0, 0.0, 0.0], [1.4960e11, 0.0, 0.0], [-7.7854e11, 0.0, 0.0], [1e11, 1e11, 0]])
+V0 = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [
+    0.0, 0.0, 0.0], [0.0, 0.0, 0.0]])
+t = 370 * 24 * 60 * 60
 dt = 10 * 24 * 60 * 60
-M = np.array([1.9889e30, 5.9742e24, 1.8986e27])
+M = np.array([1, 5, 1, 1])
 steps = 1
 epsilon = 0
-colRad = 1
+colRad = 1000
 
 
-worker = Work(P0, V0, t, dt, M, steps, epsilon, colRad)
-# worker.checkForCollision(P0, M, V0)
-newP, newV, newF = worker.numberCruncher()
+data = Data(R, N, m, t, dt, steps, epsilon)
 
-graph = Display(newP, 0, t, dt, M)
-
-graph.display()
+# worker = Work(P0, V0, t, dt, M, steps, epsilon, colRad)
+#
+# newP, newV, newF = worker.numberCruncher()
+#
+#
+# graph = Display(newP, 0, t, dt, M)
+#
+#
+# # graph.display()
+# graph.xyAnimation()
 # print('Fs:', newF)
 # print('Ps:', newP)
 # print('Vs:', newV)
