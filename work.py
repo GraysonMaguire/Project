@@ -187,8 +187,8 @@ class Work(object):
         rawV[0], rawP[0], PHalf[0] = V, P, pHalf
         print('beginning crunch')
         for i in tqdm(range(iterations)):
-            rawP[i], M, rawV[i] = self.checkForCollision(
-                rawP[i], M, rawV[i])
+            # rawP[i], M, rawV[i] = self.checkForCollision(
+            #     rawP[i], M, rawV[i])
             rawF[i] = self.calcForceOnParticles(rawP[i], M)
 
             if i == iterations - 1:
