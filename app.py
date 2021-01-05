@@ -7,7 +7,7 @@ import os
 # constants
 G = 6.67e-11
 # initial data
-N = 1000
+N = 9
 m = 1e24
 R = 1e10
 t = 370 * 24 * 60 * 60
