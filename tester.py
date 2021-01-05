@@ -4,21 +4,28 @@ from work import Work
 from init import Data
 
 
-P0 = np.array(
-    [[0.0, 0.0, 0.0], [1.4960e11, 0.0, 0.0], [-7.7854e11, 0.0, 0.0], [1e11, 1e11, 0]])
-V0 = np.array([[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [
-    0.0, 0.0, 0.0], [0.0, 0.0, 0.0]])
+# constants
+G = 6.67e-11
+# initial data
+N = 1000
+m = 1e24
+R = 1e10
 t = 370 * 24 * 60 * 60
-dt = 10 * 24 * 60 * 60
-M = np.array([1, 5, 1, 1])
-steps = 1
+dt = 24 * 60 * 60
 epsilon = 0
-colRad = 1000
+colRad = 1e7
+sunMass = 1e30
+vMax = np.sqrt(2 * G * sunMass / R)
 
+if __name__ == '__main__':
+    data = Data(R, N, m, t, dt, epsilon, vMax, sunMass)
+    P0 = data.P0
+    V0 = data.V0
+    M = data.M
 
-data = Data(R, N, m, t, dt, steps, epsilon)
+    worker = Work(P0, V0, t, dt, M, epsilon, colRad)
+    worker.calcForceOnParticles(P0, M)
 
-# worker = Work(P0, V0, t, dt, M, steps, epsilon, colRad)
 #
 # newP, newV, newF = worker.numberCruncher()
 #

@@ -19,6 +19,9 @@ vMax = np.sqrt(2 * G * sunMass / R)
 
 # app
 
+# currently takes 36~40 mins to run the above params,
+# we will see what we can do with multithreading
+
 
 def App():
     data = Data(R, N, m, t, dt, epsilon, vMax, sunMass)
