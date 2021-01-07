@@ -2,6 +2,7 @@ import numpy as np
 from display import Display
 from work import Work
 from init import Data
+import time
 
 
 # constants
@@ -16,6 +17,11 @@ epsilon = 0
 colRad = 1e7
 sunMass = 1e30
 vMax = np.sqrt(2 * G * sunMass / R)
+# 3secs to do 100particles with multiprocessing
+# dnf for 10000 Particles
+
+# 0.07s for 100 particles with no multiprocessing
+
 
 if __name__ == '__main__':
     data = Data(R, N, m, t, dt, epsilon, vMax, sunMass)
@@ -23,9 +29,16 @@ if __name__ == '__main__':
     P0 = data.P0
     V0 = data.V0
     M = data.M
-
     worker = Work(P0, V0, t, dt, M, epsilon, colRad)
-    worker.calcForceOnParticles(P0, M)
+
+    def function():
+        worker.calcForceOnParticles(P0, M)
+        return 1
+    tic = time.perf_counter()
+    function()
+    toc = time.perf_counter()
+    time = toc - tic
+    print(time)
 
 #
 # newP, newV, newF = worker.numberCruncher()

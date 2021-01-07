@@ -7,7 +7,7 @@ import os
 # constants
 G = 6.67e-11
 # initial data
-N = 10
+N = 10000
 m = 1e24
 R = 1e10
 t = 370 * 24 * 60 * 60
@@ -36,4 +36,6 @@ def App():
     graph.xyAnimation()
 
 
-App()
+if __name__ == '__main__':
+
+    App()

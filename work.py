@@ -3,6 +3,7 @@ import numpy as np
 from tqdm import tqdm
 import concurrent.futures
 import os
+
 # verbose functions
 normal = np.linalg.norm
 
@@ -43,18 +44,19 @@ class Work(object):
     def calcForceOnParticles(self, P, M):
 
         N = len(P)
-        forces = np.full((len(P), 3), 0.0)
+        # forces = np.full((len(P), 3), 0.0)
+        print('start')
+        # with concurrent.futures.ProcessPoolExecutor() as executer:
+        #     results = []
+        #     for i in range(os.cpu_count()):
+        #         r = executer.submit(self.calcForceOnParticlesMultiProcess,
+        #                             P, M, self.processSplit[i], self.processSplit[i + 1])
+        #         results.append(r)
+        #     for f in concurrent.futures.as_completed(results):
+        #         forces += f.result()
+        #         print('lock')
 
-        with concurrent.futures.ProcessPoolExecutor() as executer:
-            results = []
-            for i in range(os.cpu_count()):
-                r = executer.submit(self.calcForceOnParticlesMultiProcess,
-                                    P, M, self.processSplit[i], self.processSplit[i + 1])
-                results.append(r)
-            for f in concurrent.futures.as_completed(results):
-                forces += f.result()
-
-        # forces2 = self.oldCalcForceOnParticles(P, M)
+        forces = self.oldCalcForceOnParticles(P, M)
         # dif = forces - forces2
 
         # forces2 = self.calcForceOnParticlesMultiProcess(P, M, 0, 1000)
