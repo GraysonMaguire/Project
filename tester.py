@@ -7,7 +7,7 @@ from init import Data
 # constants
 G = 6.67e-11
 # initial data
-N = 20
+N = 100
 m = 1e24
 R = 1e10
 t = 370 * 24 * 60 * 60
@@ -19,6 +19,7 @@ vMax = np.sqrt(2 * G * sunMass / R)
 
 if __name__ == '__main__':
     data = Data(R, N, m, t, dt, epsilon, vMax, sunMass)
+
     P0 = data.P0
     V0 = data.V0
     M = data.M

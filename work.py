@@ -41,9 +41,10 @@ class Work(object):
         return (force)
 
     def calcForceOnParticles(self, P, M):
-        print('start')
+
         N = len(P)
         forces = np.full((len(P), 3), 0.0)
+
         with concurrent.futures.ProcessPoolExecutor() as executer:
             results = []
             for i in range(os.cpu_count()):
@@ -52,13 +53,10 @@ class Work(object):
                 results.append(r)
             for f in concurrent.futures.as_completed(results):
                 forces += f.result()
-                print('locked')
 
-        print('start2')
+        # forces2 = self.oldCalcForceOnParticles(P, M)
+        # dif = forces - forces2
 
-        forces2 = self.oldCalcForceOnParticles(P, M)
-        dif = forces - forces2
-        print(dif)
         # forces2 = self.calcForceOnParticlesMultiProcess(P, M, 0, 1000)
         # dif = forces - forces2
         # print('done', dif)
@@ -70,31 +68,37 @@ class Work(object):
         forces = np.full((len(P), 3), 0.0)
         y = 0
         x = 1
+
         for i in range(len(P) - 1):
             while x < len(P):
                 force = self.gForce(M[x], M[y], P[x], P[y])
                 forces[x] += force
                 forces[y] -= force
+
                 x += 1
             y += 1
             x = y + 1
+
         return forces
 
     def calcForceOnParticlesMultiProcess(self, P, M, start, finish):
-        print(f'start with start:{start} and finish:{finish}')
+
         N = len(P)
         forces = np.full((N, 3), 0.0)
         y = start
         x = start + 1
+
         while y < finish:
             while x < N:
-                print(f'x cord:{x},ycord:{y} for start:{start}')
+
                 force = self.gForce(M[x], M[y], P[x], P[y])
                 forces[x] += force
                 forces[y] -= force
+
                 x += 1
             y += 1
             x = y + 1
+
         return forces
 
     def nextVelocity(self, vPrev, f, m):
