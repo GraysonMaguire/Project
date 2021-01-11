@@ -38,7 +38,7 @@ class Data(object):
             r = R * (u)**(1 / 3)
             # print(r, theta, phi)
             P0[i] = self.spherToCart(r, theta, phi)
-        P0[0] = np.array([0, 0, 0])
+        P0[0] = np.array([1, 0, 0])
         return P0
 
     def generateV0(self, vMax, N):

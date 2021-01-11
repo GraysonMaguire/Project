@@ -8,7 +8,7 @@ import time
 # constants
 G = 6.67e-11
 # initial data
-N = 100
+N = 30000
 m = 1e24
 R = 1e10
 t = 370 * 24 * 60 * 60
@@ -22,6 +22,8 @@ vMax = np.sqrt(2 * G * sunMass / R)
 
 # 0.07s for 100 particles with no multiprocessing
 
+# new pool process seeems to have time of 0.85 for both 100 and 1000 particles
+# 10000 in 4.76 seconds
 
 if __name__ == '__main__':
     data = Data(R, N, m, t, dt, epsilon, vMax, sunMass)
@@ -29,14 +31,20 @@ if __name__ == '__main__':
     P0 = data.P0
     V0 = data.V0
     M = data.M
+
+    # P0 = np.load('P0.npy')
+    # V0 = np.load('V0.npy')
+    # M = np.load('M.npy')
+
     worker = Work(P0, V0, t, dt, M, epsilon, colRad)
 
     def function():
-        worker.calcForceOnParticles(P0, M)
-        return 1
-    tic = time.perf_counter()
-    function()
-    toc = time.perf_counter()
+        f1 = worker.calcForceOnParticles(P0, M)
+        # f2 = worker.oldCalcForceOnParticles(P0, M)
+        return f1
+    tic = time.time()
+    dif = function()
+    toc = time.time()
     time = toc - tic
     print(time)
 

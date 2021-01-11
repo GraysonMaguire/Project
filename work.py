@@ -1,7 +1,9 @@
 # imports
 import numpy as np
 from tqdm import tqdm
-import concurrent.futures
+# import concurrent.futures
+from functools import partial
+from multiprocessing import Pool
 import os
 
 # verbose functions
@@ -10,7 +12,7 @@ normal = np.linalg.norm
 
 class Work(object):
     def __init__(self, P0, V0, t, dt, M, epsilon, colRad):
-        self.processSplit = self.calcProcessSplit(len(P0))
+
         self.P0 = P0
         self.V0 = V0
         self.t = t
@@ -20,48 +22,41 @@ class Work(object):
         self.G = 6.674e-11
         self.colRad = colRad
 
-    def calcProcessSplit(self, N):
-        ys = [0]
-        cores = os.cpu_count()
-        fliped = []
-        area = ((N - 1)**2) / (2 * cores)
-        for i in range(cores):
-            y = (2 * area + ys[i]**2)**0.5
-            ys.append(y)
-            ys[i] = int(ys[i])
-            if(i == cores - 1):
-                ys[i + 1] = N
-        for i in range(cores + 1):
-            fliped.append(np.absolute(ys[cores - i] - N))
-
-        return fliped
-
     def gForce(self, m1, m2, r1, r2):
         force = -m1 * m2 * self.G * \
             ((r1 - r2) / (normal(r1 - r2)**2 + self.epsilon**2)**1.5)
         return (force)
 
+    def calcRow(self, row):
+        N = len(self.M)
+        x = row + 1
+        M = self.M
+        P = self.P0
+        newForces = np.full((N, 3), 0.0)
+        while x < N:
+            force = self.gForce(
+                M[x], M[row], P[x], P[row])
+            newForces[x] += force
+            newForces[row] -= force
+
+            # print(f'row:{row},x:{x}')
+            x += 1
+        return newForces
+
     def calcForceOnParticles(self, P, M):
-
         N = len(P)
-        # forces = np.full((len(P), 3), 0.0)
+
+        forces = np.full((N, 3), 0.0)
         print('start')
-        # with concurrent.futures.ProcessPoolExecutor() as executer:
-        #     results = []
-        #     for i in range(os.cpu_count()):
-        #         r = executer.submit(self.calcForceOnParticlesMultiProcess,
-        #                             P, M, self.processSplit[i], self.processSplit[i + 1])
-        #         results.append(r)
-        #     for f in concurrent.futures.as_completed(results):
-        #         forces += f.result()
-        #         print('lock')
 
-        forces = self.oldCalcForceOnParticles(P, M)
-        # dif = forces - forces2
+        pool = Pool()
+        results = pool.map(self.calcRow, tqdm(range(N - 1)))
 
-        # forces2 = self.calcForceOnParticlesMultiProcess(P, M, 0, 1000)
-        # dif = forces - forces2
-        # print('done', dif)
+        for force in results:
+            forces += force
+            # print(force)
+
+        # print(forces)
 
         return forces
 
@@ -71,7 +66,7 @@ class Work(object):
         y = 0
         x = 1
 
-        for i in range(len(P) - 1):
+        for i in tqdm(range(len(P) - 1)):
             while x < len(P):
                 force = self.gForce(M[x], M[y], P[x], P[y])
                 forces[x] += force
