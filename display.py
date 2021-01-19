@@ -70,9 +70,9 @@ class Display(object):
 
             return particleLine, time_text
         aniSun = animation.FuncAnimation(
-            fig, animateSun, int(self.t / self.dt), interval=100, blit=False)
+            fig, animateSun, int(self.t / self.dt), interval=10, blit=False)
         aniParticles = animation.FuncAnimation(
-            fig, animateParticles, int(self.t / self.dt), interval=100, blit=False)
+            fig, animateParticles, int(self.t / self.dt), interval=10, blit=False)
 
         plt.show()
         pass

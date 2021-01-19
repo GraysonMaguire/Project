@@ -43,7 +43,7 @@ class Work(object):
             x += 1
         return newForces
 
-    def calcForceOnParticles(self, P, M):
+    def calcForceOnParticlesMultiCore(self, P, M):
         N = len(P)
 
         forces = np.full((N, 3), 0.0)
@@ -60,13 +60,13 @@ class Work(object):
 
         return forces
 
-    def oldCalcForceOnParticles(self, P, M):
+    def calcForceOnParticles(self, P, M):
 
         forces = np.full((len(P), 3), 0.0)
         y = 0
         x = 1
 
-        for i in tqdm(range(len(P) - 1)):
+        for i in range(len(P) - 1):
             while x < len(P):
                 force = self.gForce(M[x], M[y], P[x], P[y])
                 forces[x] += force
@@ -246,8 +246,8 @@ class Work(object):
         rawV[0], rawP[0], PHalf[0] = V, P, pHalf
         print('beginning crunch')
         for i in tqdm(range(iterations)):
-            # rawP[i], M, rawV[i] = self.checkForCollision(
-            #     rawP[i], M, rawV[i])
+            rawP[i], M, rawV[i] = self.checkForCollision(
+                rawP[i], M, rawV[i])
             rawF[i] = self.calcForceOnParticles(rawP[i], M)
 
             if i == iterations - 1:

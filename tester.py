@@ -8,15 +8,15 @@ import time
 # constants
 G = 6.67e-11
 # initial data
-N = 30000
-m = 1e24
-R = 1e10
+N = 100
+M0 = 1e32
+R = 1e14
 t = 370 * 24 * 60 * 60
 dt = 24 * 60 * 60
 epsilon = 0
 colRad = 1e7
 sunMass = 1e30
-vMax = np.sqrt(2 * G * sunMass / R)
+vMax = np.sqrt(2 * G * M0 / R)
 # 3secs to do 100particles with multiprocessing
 # dnf for 10000 Particles
 
@@ -26,27 +26,33 @@ vMax = np.sqrt(2 * G * sunMass / R)
 # 10000 in 4.76 seconds
 
 if __name__ == '__main__':
-    data = Data(R, N, m, t, dt, epsilon, vMax, sunMass)
+    data = Data(R, N, M0, t, dt, epsilon, vMax, sunMass)
 
-    P0 = data.P0
-    V0 = data.V0
-    M = data.M
+    V0, P0, M = data.generateData()
+
+    # P0 = data.P0
+    # V0 = data.V0
+    # M = data.M
+
+    np.save('P0', P0)
+    np.save('V0', V0)
+    np.save('M', M)
 
     # P0 = np.load('P0.npy')
     # V0 = np.load('V0.npy')
     # M = np.load('M.npy')
 
-    worker = Work(P0, V0, t, dt, M, epsilon, colRad)
-
-    def function():
-        f1 = worker.calcForceOnParticles(P0, M)
-        # f2 = worker.oldCalcForceOnParticles(P0, M)
-        return f1
-    tic = time.time()
-    dif = function()
-    toc = time.time()
-    time = toc - tic
-    print(time)
+    # worker = Work(P0, V0, t, dt, M, epsilon, colRad)
+    #
+    # def function():
+    #     f1 = worker.calcForceOnParticles(P0, M)
+    #     # f1 = worker.oldCalcForceOnParticles(P0, M)
+    #     return f1
+    # tic = time.time()
+    # dif = function()
+    # toc = time.time()
+    # time = toc - tic
+    # print(time)
 
 #
 # newP, newV, newF = worker.numberCruncher()
