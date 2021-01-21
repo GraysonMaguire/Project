@@ -13,7 +13,7 @@ R = 1e13
 t = 370 * 24 * 60 * 60
 dt = 24 * 60 * 60
 epsilon = 0
-colRad = 1e7
+colRad = 7e8
 sunMass = 1e30
 vMax = np.sqrt(2 * G * M0 / R)
 
@@ -24,22 +24,28 @@ vMax = np.sqrt(2 * G * M0 / R)
 
 
 def App():
-    data = Data(R, N, M0, t, dt, epsilon, vMax, sunMass)
+    # data = Data(R, N, M0, t, dt, epsilon, vMax, sunMass)
 
-    V0, P0, M = data.generateData()
+    # V0, P0, M = data.generateData()
 
-    # P0 = data.P0
+    # P0 = np.load()
     # V0 = data.V0
     # M = data.M
 
-    np.save('P0', P0)
-    np.save('V0', V0)
+    # np.save('P0', P0)
+    # np.save('V0', V0)
     M = np.full(N, sunMass)
-    np.save('M', M)
+    # np.save('M', M)
 
-    worker = Work(P0, V0, t, dt, M, epsilon, colRad)
-    dataP, dataV, dataF = worker.numberCruncher()
-    np.save('testGC', dataP)
+    P0 = np.load('P0.npy')
+    V0 = np.load('V0.npy')
+
+    # worker = Work(P0, V0, t, dt, M, epsilon, colRad)
+    # dataP, dataV, dataF = worker.numberCruncher()
+    # np.save('testGC', dataP)
+
+    dataP = np.load('testGC.npy')
+
     graph = Display(dataP, 0, t, dt, M, R)
     graph.xyAnimation()
 
