@@ -40,11 +40,11 @@ def App():
     P0 = np.load('P0.npy')
     V0 = np.load('V0.npy')
 
-    # worker = Work(P0, V0, t, dt, M, epsilon, colRad)
-    # dataP, dataV, dataF = worker.numberCruncher()
-    # np.save('testGC', dataP)
+    worker = Work(P0, V0, t, dt, M, epsilon, colRad)
+    dataP, dataV, dataF = worker.numberCruncher()
+    np.save('testGC', dataP)
 
-    dataP = np.load('testGC.npy')
+    # dataP = np.load('testGC.npy')
 
     graph = Display(dataP, 0, t, dt, M, R)
     graph.xyAnimation()
