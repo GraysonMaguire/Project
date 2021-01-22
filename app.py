@@ -3,6 +3,7 @@ from display import Display
 from work import Work
 from init import Data
 import os
+import time
 
 # constants
 G = 6.67e-11
@@ -39,11 +40,12 @@ def App():
 
     P0 = np.load('P0.npy')
     V0 = np.load('V0.npy')
-
+    tick = time.time()
     worker = Work(P0, V0, t, dt, M, epsilon, colRad)
     dataP, dataV, dataF = worker.numberCruncher()
     np.save('testGC', dataP)
-
+    tock = time.time()
+    print(tock - tick)
     # dataP = np.load('testGC.npy')
 
     graph = Display(dataP, 0, t, dt, M, R)
