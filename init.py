@@ -6,11 +6,8 @@ class Data(object):
 
     def __init__(self, R, N, M0, t, dt, epsilon, vMax, sunMass):
 
-        # self.P0 = P0
-        # self.V0 = V0
         self.R = R
         self.N = N
-        # self.M = M
         self.M0 = M0
         self.t = t
         self.dt = dt
@@ -73,3 +70,56 @@ class Data(object):
                 iteration += 1
 
         return (V0, P0, M)
+
+    def convertStringToNum(self, bites):
+
+        string = str(bites)
+        string = string[2:-1]
+
+        if(not string):
+            return 0
+        if('D' in string):
+            value = string.replace('D', 'E')
+            return float(value)
+        return float(string)
+
+    def generateRandomBoolList(self, length, trues):
+        start = [True] * trues
+        end = [False] * (length - trues)
+
+        randArray = np.array(start + end)
+
+        # np.random.shuffle(randArray)
+
+        return randArray
+
+    def generateDataArrays(self, rawData, start, finish):
+        x = finish - start
+        y = len(rawData)
+        data = np.full((y, x), 0.0)
+        for j in range(y):
+            data[j] = rawData[j][start:finish]
+
+        return data
+
+    def convertM4Data(self, path, n):
+        converter = {
+            0: lambda x: self.convertStringToNum(x),
+            1: lambda x: self.convertStringToNum(x),
+            2: lambda x: self.convertStringToNum(x),
+            3: lambda x: self.convertStringToNum(x),
+            4: lambda x: self.convertStringToNum(x),
+            5: lambda x: self.convertStringToNum(x),
+            6: lambda x: self.convertStringToNum(x),
+        }
+        data = np.genfromtxt(
+            path, converters=converter)[:n]
+        randomBool = self.generateRandomBoolList(n, 100)
+
+        finalData = data[randomBool]
+
+        M = self.generateDataArrays(finalData, 0, 1)
+        P0 = self.generateDataArrays(finalData, 1, 4)
+        V0 = self.generateDataArrays(finalData, 3, 7)
+
+        return M, P0, V0

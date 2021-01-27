@@ -17,24 +17,30 @@ class Display(object):
         self.au = 149597871000
         self.orbitLabels = [0, 20, 40, 60, 80, 100]
 
-    def xyPostitionPlot(self, axis):
-        data = self.P
+    def xyzPostitionPlot(self, P):
 
-        for i in range(len(self.M)):
-            x = data[i][0]
-            y = data[i][1]
+        fig = plt.figure(figsize=(5, 4))
+        axis = fig.add_subplot(projection='3d')
 
-            axis.plot(x, y)
+        x = []
+        y = []
+        z = []
+
+        for i in range(len(P)):
+            x.append(P[i][0])
+            y.append(P[i][1])
+            z.append(P[i][2])
+
+        axis.plot(x, y, z, 'o', lw=2)
 
         axis.set_xlabel("x")
         axis.set_ylabel("y")
+        axis.set_zlabel('z')
         axis.set_title(
             "position")
-        axis.set_xlim()
 
-        axis.set_ylim()
-        axis.legend()
-        return axis
+        plt.show()
+        pass
 
     def xyAnimation(self):
         fig = plt.figure(figsize=(5, 4))

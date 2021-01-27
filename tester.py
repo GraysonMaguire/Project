@@ -3,6 +3,7 @@ from display import Display
 from work import Work
 from init import Data
 import time
+import os
 
 
 # constants
@@ -28,15 +29,22 @@ vMax = np.sqrt(2 * G * M0 / R)
 if __name__ == '__main__':
     data = Data(R, N, M0, t, dt, epsilon, vMax, sunMass)
 
-    V0, P0, M = data.generateData()
+    # data.generateRandomBoolList(10, 4)
+    # V0, P0, M = data.generateData()
+    M, P0, V0 = data.convertM4Data(
+        u'/Users/grays/Documents/Uni/Physics/3rd year/computing/M4 data/3496.36.dat', 381794)
+
+    graph = Display(P0, 0, 1, 1, M, 1e30)
+
+    graph.xyzPostitionPlot(P0)
 
     # P0 = data.P0
     # V0 = data.V0
     # M = data.M
 
-    np.save('P0', P0)
-    np.save('V0', V0)
-    np.save('M', M)
+    # np.save('P0', P0)
+    # np.save('V0', V0)
+    # np.save('M', M)
 
     # P0 = np.load('P0.npy')
     # V0 = np.load('V0.npy')
