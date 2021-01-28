@@ -31,12 +31,13 @@ if __name__ == '__main__':
 
     # data.generateRandomBoolList(10, 4)
     # V0, P0, M = data.generateData()
-    M, P0, V0 = data.convertM4Data(
+    M, P0, V0, V1 = data.convertM4Data(
         u'/Users/grays/Documents/Uni/Physics/3rd year/computing/M4 data/3496.36.dat', 381794)
 
     graph = Display(P0, 0, 1, 1, M, 1e30)
 
     graph.xyzPostitionPlot(P0)
+    graph.compareVelocityDists(V0, 30, V1, 200)
 
     # P0 = data.P0
     # V0 = data.V0

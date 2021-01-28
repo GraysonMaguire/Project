@@ -89,7 +89,7 @@ class Data(object):
 
         randArray = np.array(start + end)
 
-        # np.random.shuffle(randArray)
+        np.random.shuffle(randArray)
 
         return randArray
 
@@ -120,6 +120,7 @@ class Data(object):
 
         M = self.generateDataArrays(finalData, 0, 1)
         P0 = self.generateDataArrays(finalData, 1, 4)
-        V0 = self.generateDataArrays(finalData, 3, 7)
+        V0 = self.generateDataArrays(finalData, 4, 7)
+        V1 = self.generateDataArrays(data, 4, 7)
 
-        return M, P0, V0
+        return M, P0, V0, V1

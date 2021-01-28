@@ -131,9 +131,24 @@ class Display(object):
         plt.show()
         pass
 
-    def display(self):
+    def cumFrequency(self, axis, data, bin):
+        # fig = plt.figure(figsize=(5, 4))
+        # axis = fig.add_subplot()
 
-        fig, axis = plt.subplots(2, 2)
-        self.xyPostitionPlot(axis[0, 0])
+        x = []
 
+        for i in data:
+            x.append(np.linalg.norm(i))
+
+        axis.hist(x, bin)
+
+        # plt.show()
+        return axis
+
+    def compareVelocityDists(self, data1, bin1, data2, bin2):
+        fig, axis = plt.subplots(2, 1)
+        self.cumFrequency(axis[0], data1, bin1)
+        self.cumFrequency(axis[1], data2, bin2)
         plt.show()
+
+        pass
