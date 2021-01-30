@@ -36,7 +36,7 @@ def App():
     np.save('30-1-21-150p-2000y-10d-daddy-force', dataF)
 
     tock = time.time()
-    print(f'completed in:{tock - tick}')
+    print('completed in:' tock - tick)
     # dataP = np.load('29-1-21-100p-2000y-10d-daddy.npy')
     #
     # graph = Display(dataP, 0, t, dt, M, R)

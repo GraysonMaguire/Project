@@ -53,7 +53,7 @@ class Data(object):
         P0 = np.full((self.N, 3), 0.0)
         M = np.full((self.N, 3), 0.0)
         roof = self.plummerModelDistribution(0, 0) * 1.1
-        print(f'roof: {roof}')
+
         iteration = 0
         while iteration < self.N:
             pSpherical = self.generateRandomSphericalPolars(self.R)
@@ -63,7 +63,7 @@ class Data(object):
 
             r = roof * np.random.random()
             if(r < f):
-                print(f'current length of data: {iteration}')
+
                 P0[iteration] = self.spherToCart(pSpherical)
                 V0[iteration] = self.spherToCart(vSpherical)
                 M[iteration] = self.M0 / self.N
