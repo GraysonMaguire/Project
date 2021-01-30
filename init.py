@@ -114,13 +114,14 @@ class Data(object):
         }
         data = np.genfromtxt(
             path, converters=converter)[:n]
-        randomBool = self.generateRandomBoolList(n, 100)
+        randomBool = self.generateRandomBoolList(n, 150)
 
         finalData = data[randomBool]
 
-        M = self.generateDataArrays(finalData, 0, 1)
-        P0 = self.generateDataArrays(finalData, 1, 4)
-        V0 = self.generateDataArrays(finalData, 4, 7)
-        V1 = self.generateDataArrays(data, 4, 7)
+        M = self.generateDataArrays(finalData, 0, 1) * 1.988e30
+        P0 = self.generateDataArrays(
+            finalData, 1, 4) * 3.086e13 * (np.sqrt((n) / 100)**-1)
+        V0 = self.generateDataArrays(finalData, 4, 7) * 1000
+        V1 = self.generateDataArrays(data, 4, 7) * 1000
 
         return M, P0, V0, V1

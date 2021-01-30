@@ -21,9 +21,9 @@ vMax = np.sqrt(2 * G * M0 / R)
 
 def App():
 
-    P0 = np.load('baby/babyP0.npy')
-    V0 = np.load('baby/babyV0.npy')
-    M = np.load('baby/babyM.npy')
+    P0 = np.load('daddy/daddyP0.npy')
+    V0 = np.load('daddy/daddyV0.npy')
+    M = np.load('daddy/daddyM.npy')
 
     tick = time.time()
 
@@ -31,13 +31,13 @@ def App():
 
     dataP, dataV, dataF = worker.numberCruncher()
 
-    np.save('30-1-21-150p-2000y-10d-baby-position', dataP)
-    np.save('30-1-21-150p-2000y-10d-baby-velocity', dataV)
-    np.save('30-1-21-150p-2000y-10d-baby-force', dataF)
+    np.save('30-1-21-150p-2000y-10d-daddy-position', dataP)
+    np.save('30-1-21-150p-2000y-10d-daddy-velocity', dataV)
+    np.save('30-1-21-150p-2000y-10d-daddy-force', dataF)
 
     tock = time.time()
     print(f'completed in:{tock - tick}')
-    # dataP = np.load('29-1-21-100p-2000y-10d-baby.npy')
+    # dataP = np.load('29-1-21-100p-2000y-10d-daddy.npy')
     #
     # graph = Display(dataP, 0, t, dt, M, R)
     # graph.xyAnimation()

@@ -58,7 +58,7 @@ class Display(object):
         ax.set_xlim3d([-lim, lim])
         ax.set_xlabel('X')
 
-        ax.set_ylim3d([-lim, lim])
+        ax.set_ylim3d([-lim + self.P[0][1][0], lim + self.P[0][1][0]])
         ax.set_ylabel('Y')
 
         ax.set_zlim3d([-lim, lim])
@@ -141,6 +141,7 @@ class Display(object):
             x.append(np.linalg.norm(i))
 
         axis.hist(x, bin)
+        axis.set_xlim(0, 5e4)
 
         # plt.show()
         return axis
