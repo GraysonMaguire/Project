@@ -57,16 +57,17 @@ def reshapeData(data):
 
 
 def App(pData, vData, M):
+    print('crunching daddys energies')
     PE = calcPE(pData, M)
-    np.save('30-1-21-150p-2000y-10d-baby-PE', PE)
+    np.save('30-1-21-150p-2000y-10d-daddy-PE', PE)
     KE = calcKE(vData, M)
-    np.save('30-1-21-150p-2000y-10d-baby-KE', KE)
+    np.save('30-1-21-150p-2000y-10d-daddy-KE', KE)
     pass
 
 
-P = np.load('30-1-21-150p-2000y-10d-baby-position.npy')
-V = np.load('30-1-21-150p-2000y-10d-baby-velocity.npy')
-M = np.load('baby/babyM.npy')
+P = np.load('data/30-1-21-150p-2000y-10d-daddy-position.npy')
+V = np.load('data/30-1-21-150p-2000y-10d-daddy-velocity.npy')
+M = np.load('daddy/daddyM.npy')
 
 P = reshapeData(P)
 
