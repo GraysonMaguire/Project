@@ -20,13 +20,14 @@ dt = 24 * 60 * 60
 colRad = 1e7
 sunMass = 1e30
 vMax = np.sqrt(2 * G * M0 / R)
+minParticles = 50
 
 P0 = np.load('baby/babyP0.npy')
 V0 = np.load('baby/babyV0.npy')
 M0 = np.load('baby/babyM.npy').flatten()
 
 tick = time.time()
-pData, vData, mData = work(P0, V0, t, dt, M0, colRad)
+pData, vData, mData = work(P0, V0, t, dt, M0, colRad, minParticles)
 tock = time.time()
 
 print(tock - tick)

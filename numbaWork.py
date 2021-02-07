@@ -120,18 +120,8 @@ def handleCollision(M, V, P, indexes):
     V[primary] = newVelcoity
     M[secondary] = 0
     V[secondary] = 0
-    # P[secondary] = 0
-    # in final release this will be changed back
-    # to original but for testting this makes most sense
-
-    # newM = np.delete(M, secondary, axis=0)
-    # newV = np.delete(V, secondary, axis=0)
-    # newP = np.delete(P, secondary, axis=0)
 
     return M, V, P
-
-
-# handleCollision(M0, V0, P0, np.array([0, 1]))
 
 
 @njit
@@ -163,6 +153,15 @@ def checkForCollision(P, M, V, colRad):
         i += 1
 
     return P, M, V
+
+
+@njit
+def numberOfParticles(M):
+    number = 0
+    for m in M:
+        if m != 0:
+            number += 1
+    return number
 
 
 @njit
@@ -239,7 +238,7 @@ def checkForEscape(P, V, M):
 # print(tock - tick)
 
 @njit
-def work(P0, V0, t, dt, M, colRad):
+def work(P0, V0, t, dt, M, colRad, minParticles):
     print('START')
     iterations = int(t / dt)
     P = P0
@@ -270,6 +269,9 @@ def work(P0, V0, t, dt, M, colRad):
         if i == iterations - 1:
             break
 
+        if numberOfParticles(rawM[i]) < minParticles:
+            break
+
         rawV[i + 1] = calcNextVelocity(rawV[i], rawF[i], rawM[i], dt)
 
         rawP[i + 1], PHalf[i + 1] = calcNextPosition(rawP[i], rawV[i + 1], dt)
@@ -281,4 +283,4 @@ def work(P0, V0, t, dt, M, colRad):
     return rawP, rawV, rawM
 
 
-work(P0, V0, 4, 1, M0, 1e7)
+work(P0, V0, 4, 1, M0, 1e7, 50)
