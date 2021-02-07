@@ -1,6 +1,7 @@
 # imports
 import numpy as np
 from tqdm import tqdm
+
 # import concurrent.futures
 from functools import partial
 from multiprocessing import Pool
@@ -11,54 +12,26 @@ normal = np.linalg.norm
 
 
 class Work(object):
-    def __init__(self, P0, V0, t, dt, M, epsilon, colRad):
+    def __init__(self, P0, V0, t, dt, M, colRad):
 
         self.P0 = P0
         self.V0 = V0
         self.t = t
         self.dt = dt
-        self.M = M
-        self.epsilon = epsilon
+        self.M = M.flatten()
         self.G = 6.674e-11
         self.colRad = colRad
+        self.pData = []
+        self.vData = []
+        self.mData = []
 
     def gForce(self, m1, m2, r1, r2):
+        if m1 == 0 or m2 == 0:
+            return 0
+
         force = -m1 * m2 * self.G * \
-            ((r1 - r2) / (normal(r1 - r2)**2 + self.epsilon**2)**1.5)
+            ((r1 - r2) / (normal(r1 - r2)**2)**1.5)
         return (force)
-
-    def calcRow(self, row):
-        N = len(self.M)
-        x = row + 1
-        M = self.M
-        P = self.P0
-        newForces = np.full((N, 3), 0.0)
-        while x < N:
-            force = self.gForce(
-                M[x], M[row], P[x], P[row])
-            newForces[x] += force
-            newForces[row] -= force
-
-            # print(f'row:{row},x:{x}')
-            x += 1
-        return newForces
-
-    def calcForceOnParticlesMultiCore(self, P, M):
-        N = len(P)
-
-        forces = np.full((N, 3), 0.0)
-        print('start')
-
-        pool = Pool()
-        results = pool.map(self.calcRow, tqdm(range(N - 1)))
-
-        for force in results:
-            forces += force
-            # print(force)
-
-        # print(forces)
-
-        return forces
 
     def calcForceOnParticles(self, P, M):
 
@@ -68,26 +41,6 @@ class Work(object):
 
         for i in range(len(P) - 1):
             while x < len(P):
-                force = self.gForce(M[x], M[y], P[x], P[y])
-                forces[x] += force
-                forces[y] -= force
-
-                x += 1
-            y += 1
-            x = y + 1
-
-        return forces
-
-    def calcForceOnParticlesMultiProcess(self, P, M, start, finish):
-
-        N = len(P)
-        forces = np.full((N, 3), 0.0)
-        y = start
-        x = start + 1
-
-        while y < finish:
-            while x < N:
-
                 force = self.gForce(M[x], M[y], P[x], P[y])
                 forces[x] += force
                 forces[y] -= force
@@ -126,19 +79,18 @@ class Work(object):
         return(sumMR / sumM)
 
     def checkForCollision(self, P, M, V):
-        newP = P
-        newM = M
-        newV = V
-
+        M = self.M
         i = 0
-        while i < len(newM):
-            if newM[i] == 0:
+        while i < len(M):
+            if M[i] == 0:
                 i += 1
+
                 continue
             j = i + 1
             while j < len(P):
-                if newM[j] == 0:
+                if M[j] == 0:
                     j += 1
+
                     continue
                 p1 = P[i]
                 p2 = P[j]
@@ -146,13 +98,14 @@ class Work(object):
                     index1 = self.indexOf(P, p1)
                     index2 = self.indexOf(P, p2)
                     print('collision', index1, index2)
-                    newM, newV, newP = self.handleCollision(
-                        newM, newV, newP, [index1, index2])
+                    M, V, P = self.handleCollision(
+                        M, V, P, [index1, index2])
 
                 j += 1
             i += 1
+        self.M = M
 
-        return (newP, newM, newV)
+        return P, M, V
 
     def handleCollision(self, M, V, P, indexes):
         if M[indexes[0]] > M[indexes[1]]:
@@ -191,24 +144,48 @@ class Work(object):
                 return i
 
     def calcKE(self, V, M):
-        ke = 0
-        for i in range(len(M)):
-            ke += 0.5 * M[i] * normal(V[i])**2
-        return(ke)
+        KE = np.zeros(len(M))
 
-    def calcPE(self, P, M, F):
-        com = self.calcCOM(P, M)
+        for particle in range(len(M)):
+
+            KE[particle] = 0.5 * M[particle] * normal(V[particle])**2
+
+        return(KE)
+
+    def gPE(self, m1, m2, r1, r2):
+
+        return (-self.G * m1 * m2 * (1 / normal(r1 - r2)))
+
+    def calcPE(self, P, M):
+
         PE = np.zeros(len(M))
-        for i in range(len(M)):
-            r = -com + P[i]
-            PE[i] = np.dot(F[i], r)
-        return(np.sum(PE))
+        memory = 0
+        x = 1
 
-    def calcEnergies(self, P, F, V):
-        PE = self.calcPE(P, self.M, F)
-        KE = self.calcKE(V, self.M)
+        for y in range(len(M) - 1):
+            while x < len(M):
+                pe = self.gPE(M[x], M[y], P[x], P[y])
+                PE[x] += pe
+                PE[y] += pe
+                x += 1
+            memory += 1
+            x = memory + 1
+        return PE
+
+    def checkForEscape(self, P, V, M):
+        PE = self.calcPE(P, M)
+
+        KE = self.calcKE(V, M)
+
         T = KE + PE
-        return([T, KE, PE])
+        for i in range(len(T)):
+            if self.M[i] == 0:
+                continue
+            if T[i] >= 0:
+                self.M[i] = 0
+                print('particle ejected: ', i)
+
+        pass
 
     def reshapeData(self, data):
         totalSteps = int(self.t / self.dt)
@@ -224,40 +201,46 @@ class Work(object):
 
         return newData
 
-    def numberCruncher(self):
+    def start(self):
         iterations = int(self.t / self.dt)
         P = self.P0
         V = self.V0
         M = self.M
         pHalf = P
-        print('duration: ', self.t / (60 * 60 * 24 * 365.25))
+        print('years: ', self.t / (60 * 60 * 24 * 365.25))
         print('iterations: ', iterations)
         print('number of particles: ', len(M))
 
-        rawP = np.full(
-            (iterations, len(M), 3), 0.0)
-        rawV = np.full(
-            (iterations, len(M), 3), 0.0)
-        rawF = np.full(
-            (iterations, len(M), 3), 0.0)
-        PHalf = np.full(
-            (iterations, len(M), 3), 0.0)
+        rawP = np.full((iterations, len(M), 3), 0.0)
+        rawV = np.full((iterations, len(M), 3), 0.0)
+        rawF = np.full((iterations, len(M), 3), 0.0)
+        PHalf = np.full((iterations, len(M), 3), 0.0)
+        rawM = np.full((iterations, len(M)), 0.0)
 
         rawV[0], rawP[0], PHalf[0] = V, P, pHalf
+
         print('beginning crunch')
+
         for i in tqdm(range(iterations)):
-            rawP[i], M, rawV[i] = self.checkForCollision(
-                rawP[i], M, rawV[i])
-            rawF[i] = self.calcForceOnParticles(rawP[i], M)
+            rawP[i], rawM[i], rawV[i] = self.checkForCollision(
+                rawP[i], rawM[i], rawV[i])
+
+            rawF[i] = self.calcForceOnParticles(rawP[i], rawM[i])
 
             if i == iterations - 1:
                 break
 
-            rawV[i + 1] = self.calcNextVelocity(rawV[i], rawF[i], M)
+            rawV[i + 1] = self.calcNextVelocity(rawV[i], rawF[i], rawM[i])
 
             rawP[i + 1], PHalf[i +
                                1] = self.calcNextPosition(rawP[i], rawV[i + 1])
 
+            self.checkForEscape(PHalf[i + 1], rawV[i + 1], rawM[i])
+
         print('crunch over, finalising data...')
 
-        return(self.reshapeData(rawP), rawV, rawF)
+        self.pData = rawP
+        self.vData = rawV
+        self.mData = rawM
+
+        pass
