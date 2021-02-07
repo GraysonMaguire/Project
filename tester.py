@@ -29,33 +29,19 @@ tick = time.time()
 pData, vData, mData = work(P0, V0, t, dt, M0, colRad)
 tock = time.time()
 
-
-def reshapeData(data):
-    totalSteps = len(data)
-    Dimensions = len(data[0][0])
-    totalParticles = len(data[0])
-
-    newData = np.full((totalParticles, Dimensions, totalSteps), 0.0)
-
-    for i in (range(totalSteps)):
-        for j in range(Dimensions):
-            for k in range(totalParticles):
-                newData[k][j][i] = data[i][k][j]
-
-    return newData
+print(tock - tick)
 
 
-np.save('numbaP', reshapeData(pData))
-np.save('numbaV', vData)
-# newPData = np.load('numbaP.npy')
-# # newMData = np.load('numbaM.npy')
-oldPData = np.load('data/30-1-21-150p-2000y-10d-baby-position.npy')
-# oldMData = np.load('M.npy')
+# def reshapeData(data):
+#     totalSteps = len(data)
+#     Dimensions = len(data[0][0])
+#     totalParticles = len(data[0])
 #
+#     newData = np.full((totalParticles, Dimensions, totalSteps), 0.0)
 #
-# print(newPData)
-# print(oldMData)
-display1 = Display(reshapeData(pData), 0, t, dt, M0, R)
-display2 = Display((oldPData), 0, t, dt, M0, R)
-display1.xyAnimation()
-display2.xyAnimation()
+#     for i in (range(totalSteps)):
+#         for j in range(Dimensions):
+#             for k in range(totalParticles):
+#                 newData[k][j][i] = data[i][k][j]
+#
+#     return newData

@@ -240,7 +240,7 @@ def checkForEscape(P, V, M):
 
 @njit
 def work(P0, V0, t, dt, M, colRad):
-    print('initializing functions for numba compilation...')
+    print('START')
     iterations = int(t / dt)
     P = P0
     V = V0
@@ -250,23 +250,6 @@ def work(P0, V0, t, dt, M, colRad):
     print('iterations: ', iterations)
     print('number of particles: ', len(M))
 
-    # numba compilation
-    normal(np.array([1, 1, 1]))
-    gForce(1, 1, np.array([1, 1, 1]), np.array([-1, 1, 1]))
-    calcForceOnParticles(P, M)
-    nextVelocity(V, np.full_like(V, 1.0), M[0], dt)
-    calcNextVelocity(V, np.full_like(V, 1.0), M, dt)
-    calcNextPosition(P, V, dt)
-    calcCOM(P, M)
-    indexOf(np.array([1, 2, 3]), 3)
-    handleCollision(M, V, P, np.array([1, 2]))
-    checkForCollision(P, M, V, colRad)
-    calcKE(V, M)
-    gPE(1, 1, np.array([1, 1, 1]), np.array([-1, 1, 1]))
-    calcPE(P, M)
-    checkForEscape(P, V, M)
-    # end of compilation
-
     rawP = np.full((iterations, len(M), 3), 0.0)
     rawV = np.full((iterations, len(M), 3), 0.0)
     rawF = np.full((iterations, len(M), 3), 0.0)
@@ -275,7 +258,7 @@ def work(P0, V0, t, dt, M, colRad):
     rawM[0] = M
     rawV[0], rawP[0], PHalf[0] = V, P, pHalf
 
-    print('beginning crunch')
+    print('beginning crunch...')
 
     for i in (range(iterations)):
         if i > 0:
@@ -293,9 +276,9 @@ def work(P0, V0, t, dt, M, colRad):
 
         checkForEscape(PHalf[i + 1], rawV[i + 1], rawM[i])
 
-    print('crunch over, finalising data...')
+    print('FINISH')
 
     return rawP, rawV, rawM
 
 
-work(P0, V0, 1, 1, M0, 1e7)
+work(P0, V0, 4, 1, M0, 1e7)
