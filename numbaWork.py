@@ -7,9 +7,9 @@ from time import time
 # verbose functions
 
 G = 6.674e-11
-P0 = np.load('baby/babyP0.npy')
-V0 = np.load('baby/babyV0.npy')
-M0 = np.load('baby/babyM.npy').flatten()
+babyP0 = np.load('baby/babyP0.npy')
+babyV0 = np.load('baby/babyV0.npy')
+babyM0 = np.load('baby/babyM.npy').flatten()
 
 
 @njit
@@ -210,7 +210,7 @@ def checkForEscape(P, V, M):
             continue
         if T[i] >= 0:
             M[i] = 0
-            print('particle ejected: ', i)
+            # print('particle ejected: ', i)
 
     pass
 
@@ -238,12 +238,12 @@ def checkForEscape(P, V, M):
 # print(tock - tick)
 
 @njit
-def work(P0, V0, t, dt, M, colRad, minParticles):
+def work(P0, V0, M0, t, dt, colRad, minParticles):
     print('START')
     iterations = int(t / dt)
     P = P0
     V = V0
-    M = M
+    M = M0
     pHalf = P
     print('years: ', t / (60 * 60 * 24 * 365.25))
     print('iterations: ', iterations)
@@ -270,6 +270,7 @@ def work(P0, V0, t, dt, M, colRad, minParticles):
             break
 
         if numberOfParticles(rawM[i]) < minParticles:
+            print('Finished crunch due to number of particles subceeds the minimum')
             break
 
         rawV[i + 1] = calcNextVelocity(rawV[i], rawF[i], rawM[i], dt)
@@ -278,9 +279,11 @@ def work(P0, V0, t, dt, M, colRad, minParticles):
 
         checkForEscape(PHalf[i + 1], rawV[i + 1], rawM[i])
 
-    print('FINISH')
+    print('FINISH the time')
 
     return rawP, rawV, rawM
 
 
-work(P0, V0, 4, 1, M0, 1e7, 50)
+print('initilizing numba for work function...')
+work(babyP0, babyV0, babyM0, 4, 1, 1e7, 50)
+print('finished initilizing numba for work function')

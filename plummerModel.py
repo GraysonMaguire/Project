@@ -64,7 +64,7 @@ def plummerModel(N, M0, plummerRadius):
 
     V0 = np.full((N, 3), 0.0)
     P0 = np.full((N, 3), 0.0)
-    M = np.full((N, 3), 0.0)
+    M = np.full((N), 0.0)
 
     roof = plummerModelDistribution(0, 0, N, plummerRadius, M0) * 1.1
 

@@ -1,48 +1,57 @@
 import numpy as np
 from display import Display
-from work import Work
 from init import Data
-import os
+from plummerModel import plummerModel
+from numbaWork import work
+from tqdm import tqdm
 import time
 
-# constants
-G = 6.67e-11
-# initial data
-N = 100
-M0 = 1e32
-R = 1e15
 t = 2000 * 370 * 24 * 60 * 60
 dt = 10 * 24 * 60 * 60
-epsilon = 0
-colRad = 7e8
-sunMass = 1e30
-vMax = np.sqrt(2 * G * M0 / R)
+N = 150
+M0 = 3e32
+colRad = 1e7
+minParticles = 75
+pathOfFolder = '/Users/garymagnum/Project/data/8-2-21-testCrunch/'
+
+plummerRadiusArray = np.array(
+    [1e9, 1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17])
+
+
+def appIteration(plummerRadius):
+
+    initialV, initialP, initialM = plummerModel(N, M0, plummerRadius)
+
+    pData, vData, mData = work(
+        initialP, initialV, initialM, t, dt, colRad, minParticles)
+
+    finalP = pData[-1]
+    finalV = vData[-1]
+
+    results = np.array([initialP, initialV, finalP, finalV, mData])
+
+    fileName = f'8-2-21-150p-75por2000yr-10d-{plummerRadius}-results'
+
+    path = pathOfFolder + fileName
+
+    np.save(path, results)
+
+    pass
 
 
 def App():
+    path = pathOfFolder + '8-2-21-150p-75por2000yr-10d-initArray'
+    np.save(path, plummerRadiusArray)
 
-    P0 = np.load('baby/babyP0.npy')
-    V0 = np.load('baby/babyV0.npy')
-    M = np.load('baby/babyM.npy')
+    print('plummerRadius array has been saved! starting app...')
 
-    tick = time.time()
+    for i in tqdm(range(len(plummerRadiusArray))):
+        plummerRadius = plummerRadiusArray[i]
+        appIteration(plummerRadius)
 
-    worker = Work(P0, V0, t, dt, M, epsilon, colRad)
+    print('App finished its crunch!')
 
-    dataP, dataV, dataF = worker.numberCruncher()
-
-    np.save('30-1-21-150p-2000y-10d-baby-position', dataP)
-    np.save('30-1-21-150p-2000y-10d-baby-velocity', dataV)
-    np.save('30-1-21-150p-2000y-10d-baby-force', dataF)
-
-    tock = time.time()
-
-    # dataP = np.load('29-1-21-100p-2000y-10d-baby.npy')
-    #
-    # graph = Display(dataP, 0, t, dt, M, R)
-    # graph.xyAnimation()
+    pass
 
 
-if __name__ == '__main__':
-
-    App()
+App()
