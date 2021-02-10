@@ -96,5 +96,3 @@ M0 = 3e32  # total mass of cluster
 plummerRadius = 1e11
 
 plummerModel(1, M0, plummerRadius)
-
-plummerModel(N, M0, plummerRadius)

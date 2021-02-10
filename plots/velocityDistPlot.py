@@ -6,15 +6,16 @@ from tqdm import tqdm
 normal = np.linalg.norm
 
 
-def particlesOverTime(mData, plummerRadius, axis):
+def cumFrequency(vData, plummerRadius, axis):
 
-    particlesOverTime = np.count_nonzero(mData, 1)
+    x = []
 
-    axis.plot(particlesOverTime, label=plummerRadius)
+    for v in vData:
+        x.append(np.linalg.norm(v))
 
-    print('final number of particles is', particlesOverTime[-1])
+    axis.hist(x, 10, label=plummerRadius, histtype='step')
 
-    pass
+    return axis
 
 
 pathOfFolder = '/Users/garymagnum/Project/data/8-2-21-e13Crunch/'
@@ -28,9 +29,9 @@ fig, axis = plt.subplots()
 for i in range(len(initArray)):
     plummerRadius = initArray[i]
     path = f'/Users/garymagnum/Project/data/8-2-21-e13Crunch/8-2-21-150p-75por2000yr-10d-{plummerRadius}-results.npy'
-    mData = np.load(path, allow_pickle=True)[-1]
+    vData = np.load(path, allow_pickle=True)[-2]
 
-    particlesOverTime(mData, plummerRadius, axis)
+    cumFrequency(vData, plummerRadius, axis)
     axis.legend()
     # axis[i].set_title(plummerRadius)
 

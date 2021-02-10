@@ -6,16 +6,16 @@ from numbaWork import work
 from tqdm import tqdm
 import time
 
-t = 2000 * 370 * 24 * 60 * 60
+t = 20000 * 370 * 24 * 60 * 60
 dt = 10 * 24 * 60 * 60
 N = 150
 M0 = 3e32
 colRad = 1e7
 minParticles = 75
-pathOfFolder = '/Users/garymagnum/Project/data/8-2-21-testCrunch/'
+pathOfFolder = '/Users/garymagnum/Project/data/9-2-21-9e13Crunch/'
 
 plummerRadiusArray = np.array(
-    [1e9, 1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17])
+    [9e13])
 
 
 def appIteration(plummerRadius):
@@ -28,19 +28,19 @@ def appIteration(plummerRadius):
     finalP = pData[-1]
     finalV = vData[-1]
 
-    results = np.array([initialP, initialV, finalP, finalV, mData])
-
-    fileName = f'8-2-21-150p-75por2000yr-10d-{plummerRadius}-results'
+    fileName = f'9-2-21-150p-75por20000yr-10d-{plummerRadius}-'
 
     path = pathOfFolder + fileName
 
-    np.save(path, results)
+    np.save(path + 'position', pData)
+    np.save(path + 'velocity', vData)
+    np.save(path + 'masses', mData)
 
     pass
 
 
 def App():
-    path = pathOfFolder + '8-2-21-150p-75por2000yr-10d-initArray'
+    path = pathOfFolder + '9-2-21-150p-75por20000yr-10d-initArray'
     np.save(path, plummerRadiusArray)
 
     print('plummerRadius array has been saved! starting app...')
