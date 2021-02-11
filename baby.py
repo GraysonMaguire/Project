@@ -1,48 +1,56 @@
 import numpy as np
-from display import Display
-from work import Work
+from numbaWork import work
+from plummerModel import plummerModel
 from init import Data
 import os
 import time
+from tqdm import tqdm
 
-# constants
-G = 6.67e-11
 # initial data
-N = 100
-M0 = 1e32
-R = 1e15
-t = 2000 * 370 * 24 * 60 * 60
+t = 100 * 370 * 24 * 60 * 60
 dt = 10 * 24 * 60 * 60
-epsilon = 0
-colRad = 7e8
-sunMass = 1e30
-vMax = np.sqrt(2 * G * M0 / R)
+N = 100
+M0 = 2e32
+colRad = 1e7
+minParticles = 50
+pathOfFolder = '/Users/garymagnum/Project/data/11-2-21-9e13BabyCrunch/'
+plummerRadius = 9e13
+compressFactor = 100
+
+
+def compressData(data, compress):
+    shape = list(np.shape(data))
+    oldLength = shape[0]
+
+    if oldLength <= compress:
+        return data
+
+    newLength = int(oldLength / compress)
+    shape[0] = newLength
+
+    newShape = tuple(shape)
+
+    newData = np.full((newShape), 0.0)
+
+    for i in range(newLength):
+        newData[i] = data[i * compress]
+
+    return newData
 
 
 def App():
 
-    P0 = np.load('baby/babyP0.npy')
-    V0 = np.load('baby/babyV0.npy')
-    M = np.load('baby/babyM.npy')
+    initialV, initialP, initialM = plummerModel(N, M0, plummerRadius)
 
-    tick = time.time()
+    pData, vData, mData = work(
+        initialP, initialV, initialM, t, dt, colRad, minParticles)
 
-    worker = Work(P0, V0, t, dt, M, epsilon, colRad)
-
-    dataP, dataV, dataF = worker.numberCruncher()
-
-    np.save('30-1-21-150p-2000y-10d-baby-position', dataP)
-    np.save('30-1-21-150p-2000y-10d-baby-velocity', dataV)
-    np.save('30-1-21-150p-2000y-10d-baby-force', dataF)
-
-    tock = time.time()
-    print('completed in: ', tock - tick)
-    # dataP = np.load('29-1-21-100p-2000y-10d-baby.npy')
-    #
-    # graph = Display(dataP, 0, t, dt, M, R)
-    # graph.xyAnimation()
+    np.save(pathOfFolder + '11-2-21-100p-50por100yr-10d-9e13-position',
+            compressData(pData, compressFactor))
+    np.save(pathOfFolder + '11-2-21-100p-50por100yr-10d-9e13-velocity',
+            compressData(vData, compressFactor))
+    np.save(pathOfFolder + '11-2-21-100p-50por100yr-10d-9e13-mass',
+            compressData(mData, compressFactor))
 
 
-if __name__ == '__main__':
-
-    App()
+App()

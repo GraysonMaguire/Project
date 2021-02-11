@@ -50,15 +50,23 @@ def calcHalfMassRadius(M, P):
 
 def halfMassRadiusOverTime(mData, pData):
     iterations = len(mData)
-    dataPoints = 100
+    dataPoints = 1000
     step = int(iterations / dataPoints)
 
+    year = 36.5
+
+    fig = plt.figure()
+    ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+
     halfRadii = []
+    time = []
 
     for i in tqdm(range(0, iterations, step)):
         halfRadii.append(calcHalfMassRadius(mData[i], pData[i]))
+        time.append(i / year)
 
-    plt.plot(halfRadii)
+    ax.plot(time, halfRadii)
+
     plt.show()
 
     pass
