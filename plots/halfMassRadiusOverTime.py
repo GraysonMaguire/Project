@@ -5,6 +5,16 @@ from tqdm import tqdm
 
 normal = np.linalg.norm
 
+plt.rc('font', family='serif')
+plt.style.use('dark_background')
+fig, axis = plt.subplots()
+
+dt = 10 * 24 * 60 * 60
+compressFactor = 100
+xUnit = 1000 * 365.25 * 24 * 60 * 60
+effdt = compressFactor * dt / xUnit
+yUnit = 3.086e13
+
 
 def calcCOM(P, M):
     result = np.zeros(3)
@@ -43,38 +53,39 @@ def calcHalfMassRadius(M, P):
     for j in range(len(orderedRadii)):
         total += orderedMasses[j]
         if total >= halfMass:
-            return orderedRadii[j]
+            return orderedRadii[j] / yUnit
 
     pass
 
 
-def halfMassRadiusOverTime(mData, pData):
+def halfMassRadiusOverTime(mData, pData, color, label):
     iterations = len(mData)
-    dataPoints = 1000
+    dataPoints = 10000
     step = int(iterations / dataPoints)
-
-    year = 36.5
-
-    fig = plt.figure()
-    ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
 
     halfRadii = []
     time = []
 
     for i in tqdm(range(0, iterations, step)):
         halfRadii.append(calcHalfMassRadius(mData[i], pData[i]))
-        time.append(i / year)
+        time.append(i * effdt)
 
-    ax.plot(time, halfRadii)
-
-    plt.show()
+    axis.plot(time, halfRadii, color=color, label=label)
 
     pass
 
 
 mData = np.load(
-    '/Users/garymagnum/Project/data/9-2-21-9e13Crunch/9-2-21-150p-75por20000yr-10d-90000000000000.0-masses.npy')
+    '/Users/garymagnum/Project/data/11-2-21-9e13BabyCrunch/11-2-21-100p-50por100000yr-10d-9e13-mass.npy')
 pData = np.load(
-    '/Users/garymagnum/Project/data/9-2-21-9e13Crunch/9-2-21-150p-75por20000yr-10d-90000000000000.0-position.npy')
+    '/Users/garymagnum/Project/data/11-2-21-9e13BabyCrunch/11-2-21-100p-50por100000yr-10d-9e13-position.npy')
 
-halfMassRadiusOverTime(mData, pData)
+halfMassRadiusOverTime(mData, pData, 'red', '9e13m')
+
+axis.set_xlabel('time/kyr')
+axis.set_ylabel('Half mass radius/pc')
+axis.set_title('Mass of Globular cluster over time')
+
+plt.legend()
+plt.savefig('halfMassRadius.png', transparent=True)
+plt.show()
