@@ -2,7 +2,7 @@
 
 # Request resources:
 #SBATCH -n 1
-#SBATCH --mem=64G
+#SBATCH --mem=63G
 #SBATCH --time=30:0:0
 
 # Run on the queue for serial ("sequential") work
