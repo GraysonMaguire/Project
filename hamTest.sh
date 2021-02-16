@@ -7,7 +7,7 @@
 
 # Run on the queue for serial ("sequential") work
 # (job will share node with other jobs)
-#SBATCH -p seq7.q
+#SBATCH -p test.q
 
 # Commands to be run:
 
