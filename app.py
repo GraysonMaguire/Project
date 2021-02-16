@@ -74,7 +74,7 @@ def App():
             newP)
     np.save(pathOfFolder + '16-2-21-200p-Myr-velocity',
             newV)
-    np.save(pathOfFolder + '16-2-21-200p-Myr-position',
+    np.save(pathOfFolder + '16-2-21-200p-Myr-mass',
             newM)
 
     print('saved successfully')

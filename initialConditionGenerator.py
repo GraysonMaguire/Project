@@ -48,7 +48,13 @@ def App():
     np.save(path + '16-2-21-200p-Myr-position', np.array([newPosition]))
     np.save(path + '16-2-21-200p-Myr-velocity', np.array([newVelocity]))
 
+    m = np.load(path + '16-2-21-200p-Myr-mass.npy')
+    v = np.load(path + '16-2-21-200p-Myr-velocity.npy')
+    p = np.load(path + '16-2-21-200p-Myr-position.npy')
+
+    print(np.shape(m), np.shape(v), np.shape(p))
+
     pass
 
 
-# App()
+App()
