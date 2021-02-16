@@ -3,7 +3,7 @@
 # Request resources:
 #SBATCH -n 1
 #SBATCH --mem=1G
-#SBATCH --time=0:10:0  
+#SBATCH --time=0:10:0
 
 # Run on the queue for serial ("sequential") work
 # (job will share node with other jobs)
@@ -13,6 +13,6 @@
 
 module load python/3.6.8
 
-python3 -m pip install numba
+pip install --user numba
 
 python3 hamTest.py
