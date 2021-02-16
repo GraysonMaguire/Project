@@ -13,6 +13,4 @@
 
 module load python/3.6.8
 
-pip install --user numba
-
 python3 hamTest.py
