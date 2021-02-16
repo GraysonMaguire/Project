@@ -5,9 +5,14 @@ from tqdm import tqdm
 
 normal = np.linalg.norm
 
-plt.rc('font', family='serif')
+plt.rc('font', family='serif', weight='bold', size='20')
+
 plt.style.use('dark_background')
-fig, axis = plt.subplots()
+fig = plt.subplots(figsize=(12, 20), dpi=400)
+axisTop = plt.subplot(4, 3, (1, 3))
+axisMain = plt.subplot(4, 3, (4, 9))
+axisSec = plt.subplot(4, 3, (10, 12))
+
 
 dt = 10 * 24 * 60 * 60
 compressFactor = 100
@@ -70,16 +75,26 @@ def halfMassRadiusOverTime(mData, pData, color, label):
         halfRadii.append(calcHalfMassRadius(mData[i], pData[i]))
         time.append(i * effdt)
 
-    axis.plot(time, halfRadii, color=color, label=label)
+    ormalise = np.mean(halfRadii)
+
+    totalMassOverTime = np.sum(mData, 1)
+    time1 = np.array(list(range(len(totalMassOverTime)))) * effdt
+
+    normalisedMassOverTime = totalMassOverTime / totalMassOverTime[0]
+
+    axisMain.plot(time, halfRadii, color=color, label=label)
+
+    normalise = np.mean(halfRadii)
+
+    halfRadii = np.array(halfRadii) / normalise
+
+    axisSec.plot(time, halfRadii, color=color, label=label)
+    axisTop.plot(time1, normalisedMassOverTime, color=color, label=label)
 
     pass
 
 
-mData1 = np.load(
-    '/Users/garymagnum/Project/data/11-2-21-9e13BabyCrunch/11-2-21-100p-50por100000yr-10d-9e13-mass.npy')
-pData1 = np.load(
-    '/Users/garymagnum/Project/data/11-2-21-9e13BabyCrunch/11-2-21-100p-50por100000yr-10d-9e13-position.npy')
-
+# Import dataPoints
 mData2 = np.load(
     '/Users/garymagnum/Project/data/12-2-21-2e14BabyCrunch/12-2-21-100p-50por100000yr-10d-2e14-mass.npy'
 )
@@ -95,15 +110,33 @@ mData4 = np.load(
 pData4 = np.load(
     '/Users/garymagnum/Project/data/13-2-21-5e14BabyCrunch/13-2-21-100p-50por100000yr-10d-5e14-position.npy')
 
-# halfMassRadiusOverTime(mData1, pData1, 'red', '9e13m')
-halfMassRadiusOverTime(mData2, pData2, 'blue', '1e14m')
-halfMassRadiusOverTime(mData3, pData3, 'green', '1e15m')
+axisSec.set_xlabel('time/kyr')
+axisMain.set_ylabel('HMR/pc')
+axisSec.set_ylabel('Normalised to mean')
+axisTop.set_ylabel('Total mass of cluster/M0')
+
+axisTop.set_xticks([])
+axisMain.set_xticks([])
+axisSec.set_yticks([0.5, 0.75, 1, 1.25, 1.5])
+
+axisSec.set_ylim(0.5, 1.5)
+axisSec.set_xlim(0, 200)
+axisMain.set_xlim(0, 200)
+axisTop.set_xlim(0, 200)
+axisSec.plot([0, 200], [1, 1], '--', color='white')
+
+
+halfMassRadiusOverTime(mData2, pData2, 'deepskyblue', '1e14m')
 halfMassRadiusOverTime(mData4, pData4, 'orange', '5e14m')
+halfMassRadiusOverTime(mData3, pData3, 'lime', '1e15m')
 
-axis.set_xlabel('time/kyr')
-axis.set_ylabel('Half mass radius/pc')
-axis.set_title('Half mass of Globular cluster over time')
 
-plt.legend()
-plt.savefig('halfMassRadius.png', transparent=True)
+plt.subplots_adjust(hspace=0)
+
+axisMain.legend(title='Plummer radius')
+
+# plt.tight_layout()
+
+# plt.legend()
+plt.savefig('posterPlot.png', transparent=True)
 plt.show()

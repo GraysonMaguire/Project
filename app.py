@@ -1,57 +1,92 @@
 import numpy as np
-from display import Display
-from init import Data
-from plummerModel import plummerModel
 from numbaWork import work
+from plummerModel import plummerModel
+from init import Data
+import os
+from time import time
 from tqdm import tqdm
-import time
 
-t = 20000 * 370 * 24 * 60 * 60
+# initial data
+t = 1000 * 370 * 24 * 60 * 60
 dt = 10 * 24 * 60 * 60
-N = 150
-M0 = 3e32
+N = 200
+M0 = 2e32
 colRad = 1e7
-minParticles = 75
-pathOfFolder = '/Users/garymagnum/Project/data/9-2-21-9e13Crunch/'
+minParticles = 50
+pathOfFolder = '/Users/garymagnum/Project/data/16-2-21-CollisionCrunch/'
+compressFactor = 100
 
-plummerRadiusArray = np.array(
-    [9e13])
+year1000 = 370
+finalLength = 100 * year1000
 
 
-def appIteration(plummerRadius):
+def thinData(data, compress):
+    shape = list(np.shape(data))
+    oldLength = shape[0]
 
-    initialV, initialP, initialM = plummerModel(N, M0, plummerRadius)
+    if oldLength <= compress:
+        return data
+
+    newLength = int(oldLength / compress)
+    shape[0] = newLength
+
+    newShape = tuple(shape)
+
+    newData = np.full((newShape), 0.0)
+
+    for i in range(newLength):
+        newData[i] = data[i * compress]
+
+    return newData
+
+
+def stitchDataTogether(data, addData):
+    return np.concatenate((data[:-1], addData))
+
+
+def App():
+
+    oldP = np.load(
+        pathOfFolder + '16-2-21-200p-Myr-position.npy')
+    oldV = np.load(
+        pathOfFolder + '16-2-21-200p-Myr-velocity.npy')
+    oldM = np.load(
+        pathOfFolder + '16-2-21-200p-Myr-mass.npy')
+
+    initialM = oldM[-1]
+    initialP = oldP[-1]
+    initialV = oldV[-1]
 
     pData, vData, mData = work(
         initialP, initialV, initialM, t, dt, colRad, minParticles)
 
-    finalP = pData[-1]
-    finalV = vData[-1]
+    thinP = thinData(pData, compressFactor)
+    thinV = thinData(vData, compressFactor)
+    thinM = thinData(mData, compressFactor)
 
-    fileName = f'9-2-21-150p-75por20000yr-10d-{plummerRadius}-'
+    newP = np.concatenate((oldP[:-1], thinP))
+    newV = np.concatenate((oldV[:-1], thinV))
+    newM = np.concatenate((oldM[:-1], thinM))
 
-    path = pathOfFolder + fileName
+    print('saving...')
 
-    np.save(path + 'position', pData)
-    np.save(path + 'velocity', vData)
-    np.save(path + 'masses', mData)
+    np.save(pathOfFolder + '16-2-21-200p-Myr-position',
+            newP)
+    np.save(pathOfFolder + '16-2-21-200p-Myr-velocity',
+            newV)
+    np.save(pathOfFolder + '16-2-21-200p-Myr-position',
+            newM)
 
-    pass
+    print('saved successfully')
 
-
-def App():
-    path = pathOfFolder + '9-2-21-150p-75por20000yr-10d-initArray'
-    np.save(path, plummerRadiusArray)
-
-    print('plummerRadius array has been saved! starting app...')
-
-    for i in tqdm(range(len(plummerRadiusArray))):
-        plummerRadius = plummerRadiusArray[i]
-        appIteration(plummerRadius)
-
-    print('App finished its crunch!')
-
-    pass
+    return len(newM)
 
 
-App()
+length = 0
+
+
+pbar = tqdm(total=finalLength)
+
+while length <= finalLength:
+    length = App()
+    pbar.update(length)

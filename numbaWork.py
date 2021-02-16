@@ -263,6 +263,8 @@ def work(P0, V0, M0, t, dt, colRad, minParticles):
         if i > 0:
             rawP[i], rawM[i], rawV[i] = checkForCollision(
                 rawP[i], rawM[i - 1], rawV[i], colRad)
+        # if i > 0:
+        #     rawM[i] = rawM[i - 1]
 
         rawF[i] = calcForceOnParticles(rawP[i], rawM[i])
 

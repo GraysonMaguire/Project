@@ -7,8 +7,8 @@ from tqdm import tqdm
 # [iteration][particle][position]
 pRaw = 0
 plummerRadius = 9e13
-path = f'/Users/garymagnum/Project/data/8-2-21-e13Crunch/8-2-21-150p-75por2000yr-10d-{plummerRadius}-results.npy'
-pData = np.load(path, allow_pickle=True)[-3]
+path = '/Users/garymagnum/Project/data/16-2-21-CollisionCrunch/16-2-21-200p-Myr-position.npy'
+pData = np.load(path, allow_pickle=True)[0]
 print(np.shape(pData))
 R = 5e14
 

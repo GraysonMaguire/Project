@@ -65,9 +65,10 @@ def halfMassRadiusOverTime(mData, pData, color, label):
 
     halfRadii = []
     time = []
+    normalise = calcHalfMassRadius(mData[0], pData[0])
 
     for i in tqdm(range(0, iterations, step)):
-        halfRadii.append(calcHalfMassRadius(mData[i], pData[i]))
+        halfRadii.append(calcHalfMassRadius(mData[i], pData[i]) / normalise)
         time.append(i * effdt)
 
     axis.plot(time, halfRadii, color=color, label=label)
