@@ -13,7 +13,7 @@ M0 = 2e32
 colRad = 1e7
 minParticles = 50
 compressFactor = 100
-pathOfFolder = '/Users/garymagnum/Project/hamData/'
+pathOfFolder = 'hamData/'
 pathOfStore = '/ddn/data/xnlg39/'
 
 
