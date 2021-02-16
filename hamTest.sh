@@ -2,12 +2,12 @@
 
 # Request resources:
 #SBATCH -n 1
-#SBATCH --mem=1G
-#SBATCH --time=0:10:0
+#SBATCH --mem=64G
+#SBATCH --time=30:0:0
 
 # Run on the queue for serial ("sequential") work
 # (job will share node with other jobs)
-#SBATCH -p test.q
+#SBATCH -p seq7.q
 
 # Commands to be run:
 

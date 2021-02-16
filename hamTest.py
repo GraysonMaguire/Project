@@ -6,7 +6,7 @@ import os
 from time import time
 from tqdm import tqdm
 
-t = 100 * 370 * 24 * 60 * 60
+t = 100000 * 370 * 24 * 60 * 60
 dt = 10 * 24 * 60 * 60
 N = 200
 M0 = 2e32
