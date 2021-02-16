@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Request resources:
-#SBATCH -n 1          # 1 CPU core
-#SBATCH --mem=1G      # 1 GB RAM
-#SBATCH --time=6:0:0  # 6 hours (hours:minutes:seconds)
+#SBATCH -n 1
+#SBATCH --mem=1G
+#SBATCH --time=0:10:0  
 
 # Run on the queue for serial ("sequential") work
 # (job will share node with other jobs)
