@@ -7,13 +7,13 @@ plummerRadius = 1e15
 
 initialV, initialP, initialM = plummerModel(N, M0, plummerRadius)
 
-pathOfFolder = '/Users/garymagnum/Project/data/16-2-21-CollisionCrunch/'
+pathOfFolder = '/Users/garymagnum/Project/hamData/'
 
-np.save(pathOfFolder + '16-2-21-100p-daddy-position',
+np.save(pathOfFolder + '16-2-21-100p-baby-position',
         initialP)
-np.save(pathOfFolder + '16-2-21-100p-daddy-velocity',
+np.save(pathOfFolder + '16-2-21-100p-baby-velocity',
         initialV)
-np.save(pathOfFolder + '16-2-21-100p-daddy-mass',
+np.save(pathOfFolder + '16-2-21-100p-baby-mass',
         initialM)
 
 print('finished')

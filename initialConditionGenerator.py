@@ -2,21 +2,21 @@ import numpy as np
 from time import time
 from tqdm import tqdm
 
-path = '/Users/garymagnum/Project/data/16-2-21-CollisionCrunch/'
+path = '/Users/garymagnum/Project/hamData/'
 
 babyMass = np.load(
-    '/Users/garymagnum/Project/data/16-2-21-CollisionCrunch/baby/16-2-21-100p-baby-mass.npy')
+    '/Users/garymagnum/Project/hamData/16-2-21-100p-baby-mass.npy')
 babyPosition = np.load(
-    '/Users/garymagnum/Project/data/16-2-21-CollisionCrunch/baby/16-2-21-100p-baby-position.npy')
+    '/Users/garymagnum/Project/hamData/16-2-21-100p-baby-position.npy')
 babyVelocity = np.load(
-    '/Users/garymagnum/Project/data/16-2-21-CollisionCrunch/baby/16-2-21-100p-baby-velocity.npy')
+    '/Users/garymagnum/Project/hamData/16-2-21-100p-baby-velocity.npy')
 
 daddyMass = np.load(
-    '/Users/garymagnum/Project/data/16-2-21-CollisionCrunch/daddy/16-2-21-100p-daddy-mass.npy')
+    '/Users/garymagnum/Project/hamData/16-2-21-100p-daddy-mass.npy')
 daddyPosition = np.load(
-    '/Users/garymagnum/Project/data/16-2-21-CollisionCrunch/daddy/16-2-21-100p-daddy-position.npy')
+    '/Users/garymagnum/Project/hamData/16-2-21-100p-daddy-position.npy')
 daddyVelocity = np.load(
-    '/Users/garymagnum/Project/data/16-2-21-CollisionCrunch/daddy/16-2-21-100p-daddy-velocity.npy')
+    '/Users/garymagnum/Project/hamData/16-2-21-100p-daddy-velocity.npy')
 
 t = 60000 * 365.25 * 24 * 60 * 60
 M0 = 2e32
