@@ -4,6 +4,8 @@
 #SBATCH -n 1
 #SBATCH --mem=60G
 #SBATCH --time=30:0:0
+#SBATCH --mail-user=xnlg39@durham.ac.uk
+#SBATCH --mail-type=END,FAIL
 
 # Run on the queue for serial ("sequential") work
 # (job will share node with other jobs)
