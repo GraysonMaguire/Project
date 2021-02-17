@@ -13,4 +13,6 @@
 
 module load python/3.6.8
 
-python3 hamTest.py
+python3 initHam.py
+
+python3 appHam.py

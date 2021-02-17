@@ -75,23 +75,27 @@ class Display(object):
                     t = t_max - 1
                 yield t
 
-        def animateP1(i):
-            thisx = self.P[0][0][i]
-            thisy = self.P[0][1][i]
-            thisz = self.P[0][2][i]
+        def animateDaddy(i):
+            thisx = []
+            thisy = []
+            thisz = []
+            for j in range(int(len(self.P) / 2)):
+                thisx.append(self.P[-(j + 1)][0][i])
+                thisy.append(self.P[-(j + 1)][1][i])
+                thisz.append(self.P[-(j + 1)][2][i])
 
             P1Line.set_data_3d(thisx, thisy, thisz)
 
             return animP1
 
-        def animateParticles(i):
+        def animateBaby(i):
             thisx = []
             thisy = []
             thisz = []
-            for particle in self.P:
-                thisx.append(particle[0][i])
-                thisy.append(particle[1][i])
-                thisz.append(particle[2][i])
+            for j in range(int(len(self.P) / 2)):
+                thisx.append(self.P[j][0][i])
+                thisy.append(self.P[j][1][i])
+                thisz.append(self.P[j][2][i])
 
             particleLine.set_data_3d(thisx, thisy, thisz)
             ax.set_title(time_template % (i * self.dt / self.year))
@@ -120,9 +124,9 @@ class Display(object):
 
         fig.canvas.mpl_connect('key_press_event', on_press)
         animP1 = animation.FuncAnimation(
-            fig, animateP1, frames=update_time, interval=100, blit=False, repeat=True)
+            fig, animateBaby, frames=update_time, interval=100, blit=False, repeat=True)
         anim = animation.FuncAnimation(
-            fig, animateParticles, frames=update_time, interval=100, blit=False, repeat=True)
+            fig, animateDaddy, frames=update_time, interval=100, blit=False, repeat=True)
         anim.running = True
         animP1.running = True
         anim.direction = +1

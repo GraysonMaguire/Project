@@ -37,6 +37,10 @@ def thinData(data, compress):
     return newData
 
 
+def stitchDataTogether(data, addData):
+    return np.concatenate((data[:-1], addData))
+
+
 oldP = np.load(
     pathOfFolder + '16-2-21-200p-Myr-position.npy')
 oldV = np.load(
