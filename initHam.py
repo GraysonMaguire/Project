@@ -6,6 +6,27 @@ import os
 from time import time
 from tqdm import tqdm
 
+
+def thinData(data, compress):
+    shape = list(np.shape(data))
+    oldLength = shape[0]
+
+    if oldLength <= compress:
+        return data
+
+    newLength = int(oldLength / compress)
+    shape[0] = newLength
+
+    newShape = tuple(shape)
+
+    newData = np.full((newShape), 0.0)
+
+    for i in range(newLength):
+        newData[i] = data[i * compress]
+
+    return newData
+
+
 print('creating np saves for iterations...')
 
 t = 10000 * 370 * 24 * 60 * 60
