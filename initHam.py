@@ -35,6 +35,7 @@ N = 200
 M0 = 2e32
 colRad = 1e7
 minParticles = 50
+compressFactor = 100
 
 pathOfFolder = 'hamData/'
 pathOfSave = '/ddn/data/xnlg39/'
