@@ -247,7 +247,7 @@ def work(P0, V0, M0, t, dt, colRad, minParticles):
     pHalf = P
     # print('years: ', t / (60 * 60 * 24 * 365.25))
     # print('iterations: ', iterations)
-    print('number of particles: ', np.sum(M) / 2e30)
+    # print('number of particles: ', np.sum(M) / 2e30)
 
     rawP = np.full((iterations, len(M), 3), 0.0)
     rawV = np.full((iterations, len(M), 3), 0.0)

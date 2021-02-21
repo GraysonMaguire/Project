@@ -13,12 +13,14 @@ N = 200
 M0 = 2e32
 colRad = 1e7
 minParticles = 50
-pathOfFolder = '/ddn/data/xnlg39/'
+
+pathOfInit = 'hamData/'
+pathOfFolder = '/ddn/data/xnlg39/finalData/'
 
 compressFactor = 100
 
 year1000 = 370
-finalLength = 100 * year1000
+finalLength = 1000 * year1000
 
 
 def thinData(data, compress):
@@ -81,11 +83,50 @@ def App():
     return len(newM)
 
 
+print('initializing app')
+
 length = 0
 
+oldP = np.load(
+    pathOfInit + '16-2-21-200p-Myr-position.npy')
+oldV = np.load(
+    pathOfInit + '16-2-21-200p-Myr-velocity.npy')
+oldM = np.load(
+    pathOfInit + '16-2-21-200p-Myr-mass.npy')
+
+initialM = oldM[-1]
+initialP = oldP[-1]
+initialV = oldV[-1]
+
+pData, vData, mData = work(
+    initialP, initialV, initialM, t, dt, colRad, minParticles)
+
+thinP = thinData(pData, compressFactor)
+thinV = thinData(vData, compressFactor)
+thinM = thinData(mData, compressFactor)
+
+newP = thinP
+newV = thinV
+newM = thinM
+
+np.save(pathOfFolder + '16-2-21-200p-Myr-position',
+        newP)
+np.save(pathOfFolder + '16-2-21-200p-Myr-velocity',
+        newV)
+np.save(pathOfFolder + '16-2-21-200p-Myr-mass',
+        newM)
+
+
+print('CREATED')
 
 pbar = tqdm(total=finalLength)
+oldLength = 0
 
 while length <= finalLength:
+
     length = App()
-    pbar.update(length)
+
+    difference = length - oldLength
+    oldLength = length
+
+    pbar.update(difference)

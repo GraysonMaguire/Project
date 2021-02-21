@@ -76,9 +76,9 @@ def halfMassRadiusOverTime(mData, pData, color, label):
 
 
 mData1 = np.load(
-    '/Users/garymagnum/Project/data/11-2-21-9e13BabyCrunch/11-2-21-100p-50por100000yr-10d-9e13-mass.npy')
+    '/Users/garymagnum/Project/data/19-2-21-e16Crunch/16-2-21-100p-baby-mass.npy')
 pData1 = np.load(
-    '/Users/garymagnum/Project/data/11-2-21-9e13BabyCrunch/11-2-21-100p-50por100000yr-10d-9e13-position.npy')
+    '/Users/garymagnum/Project/data/19-2-21-e16Crunch/16-2-21-100p-baby-position.npy')
 
 mData2 = np.load(
     '/Users/garymagnum/Project/data/12-2-21-2e14BabyCrunch/12-2-21-100p-50por100000yr-10d-2e14-mass.npy'
@@ -95,7 +95,7 @@ mData4 = np.load(
 pData4 = np.load(
     '/Users/garymagnum/Project/data/13-2-21-5e14BabyCrunch/13-2-21-100p-50por100000yr-10d-5e14-position.npy')
 
-# halfMassRadiusOverTime(mData1, pData1, 'red', '9e13m')
+halfMassRadiusOverTime(mData1, pData1, 'red', '9e13m')
 halfMassRadiusOverTime(mData2, pData2, 'blue', '1e14m')
 halfMassRadiusOverTime(mData3, pData3, 'green', '1e15m')
 halfMassRadiusOverTime(mData4, pData4, 'orange', '5e14m')
