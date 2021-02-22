@@ -10,7 +10,7 @@ compressFactor = 100
 xUnit = 1000 * 365.25 * 24 * 60 * 60
 effdt = compressFactor * dt / xUnit
 mData1 = np.load(
-    '/Users/garymagnum/Project/data/19-2-21-e16Crunch/16-2-21-100p-baby-mass.npy')
+    '/Users/garymagnum/Project/data/finalData/16-2-21-200p-Myr-mass.npy')
 # mData2 = np.load(
 #     '/Users/garymagnum/Project/data/12-2-21-2e14BabyCrunch/12-2-21-100p-50por100000yr-10d-2e14-mass.npy')
 # mData3 = np.load(
@@ -45,7 +45,7 @@ axis.set_xlabel('time/kyr')
 axis.set_ylabel('Total mass of cluster/M0')
 
 # axis.set_title('Mass of Globular cluster over time')
-axis.set_xlim(0, 200)
+axis.set_xlim(0, 1000)
 
 axis.legend()
 plt.tight_layout()
