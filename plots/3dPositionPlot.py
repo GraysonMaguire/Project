@@ -7,10 +7,10 @@ from tqdm import tqdm
 # [iteration][particle][position]
 pRaw = 0
 plummerRadius = 9e13
-path = '/Users/garymagnum/Project/hamData/16-2-21-200p-Myr-position.npy'
+path = '/Users/garymagnum/Project/hamData/23-2-21-200p-Myr-position.npy'
 pData = np.load(path, allow_pickle=True)[0]
 print(np.shape(pData))
-R = 5e14
+R = 1e17
 
 
 def xyzPostitionPlot(P=pData):

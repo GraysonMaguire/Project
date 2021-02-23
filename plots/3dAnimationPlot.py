@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 R = 1e14
 P = np.load(
-    '/Users/garymagnum/Project/data/18-2-21-HamTestCrunch/16-2-21-200p-Myr-position.npy')
+    '/Users/garymagnum/Project/data/16-2-21-200p-Myr-position.npy')
 E = 0
 M = 100
 t = 100000 * 370 * 24 * 60 * 60

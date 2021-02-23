@@ -15,7 +15,8 @@ colRad = 1e7
 minParticles = 50
 
 pathOfInit = 'hamData/'
-pathOfFolder = '/ddn/data/xnlg39/finalData/'
+pathOfFolder = '/ddn/data/xnlg39/finalData2/'
+date = '23-2-21-'
 
 compressFactor = 100
 
@@ -50,11 +51,11 @@ def stitchDataTogether(data, addData):
 def App():
 
     oldP = np.load(
-        pathOfFolder + '16-2-21-200p-Myr-position.npy')
+        pathOfFolder + date + '200p-Myr-position.npy')
     oldV = np.load(
-        pathOfFolder + '16-2-21-200p-Myr-velocity.npy')
+        pathOfFolder + date + '200p-Myr-velocity.npy')
     oldM = np.load(
-        pathOfFolder + '16-2-21-200p-Myr-mass.npy')
+        pathOfFolder + date + '200p-Myr-mass.npy')
 
     initialM = oldM[-1]
     initialP = oldP[-1]
@@ -71,11 +72,11 @@ def App():
     newV = np.concatenate((oldV[:-1], thinV))
     newM = np.concatenate((oldM[:-1], thinM))
 
-    np.save(pathOfFolder + '16-2-21-200p-Myr-position',
+    np.save(pathOfFolder + date + '200p-Myr-position',
             newP)
-    np.save(pathOfFolder + '16-2-21-200p-Myr-velocity',
+    np.save(pathOfFolder + date + '200p-Myr-velocity',
             newV)
-    np.save(pathOfFolder + '16-2-21-200p-Myr-mass',
+    np.save(pathOfFolder + date + '200p-Myr-mass',
             newM)
 
     print('Saved')
@@ -88,11 +89,11 @@ print('initializing app')
 length = 0
 
 oldP = np.load(
-    pathOfInit + '16-2-21-200p-Myr-position.npy')
+    pathOfInit + date + '200p-Myr-position.npy')
 oldV = np.load(
-    pathOfInit + '16-2-21-200p-Myr-velocity.npy')
+    pathOfInit + date + '200p-Myr-velocity.npy')
 oldM = np.load(
-    pathOfInit + '16-2-21-200p-Myr-mass.npy')
+    pathOfInit + date + '200p-Myr-mass.npy')
 
 initialM = oldM[-1]
 initialP = oldP[-1]
@@ -109,11 +110,11 @@ newP = thinP
 newV = thinV
 newM = thinM
 
-np.save(pathOfFolder + '16-2-21-200p-Myr-position',
+np.save(pathOfFolder + date + '200p-Myr-position',
         newP)
-np.save(pathOfFolder + '16-2-21-200p-Myr-velocity',
+np.save(pathOfFolder + date + '200p-Myr-velocity',
         newV)
-np.save(pathOfFolder + '16-2-21-200p-Myr-mass',
+np.save(pathOfFolder + date + '200p-Myr-mass',
         newM)
 
 

@@ -279,7 +279,7 @@ def work(P0, V0, M0, t, dt, colRad, minParticles):
 
         rawP[i + 1], PHalf[i + 1] = calcNextPosition(rawP[i], rawV[i + 1], dt)
 
-        # checkForEscape(PHalf[i + 1], rawV[i + 1], rawM[i])
+        checkForEscape(PHalf[i + 1], rawV[i + 1], rawM[i])
 
     print('FINISH the time')
 
