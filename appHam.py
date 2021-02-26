@@ -84,43 +84,44 @@ def App():
     return len(newM)
 
 
-print('initializing app')
-
-length = 0
-
-oldP = np.load(
-    pathOfInit + date + '200p-Myr-position.npy')
-oldV = np.load(
-    pathOfInit + date + '200p-Myr-velocity.npy')
-oldM = np.load(
-    pathOfInit + date + '200p-Myr-mass.npy')
-
-initialM = oldM[-1]
-initialP = oldP[-1]
-initialV = oldV[-1]
-
-pData, vData, mData = work(
-    initialP, initialV, initialM, t, dt, colRad, minParticles)
-
-thinP = thinData(pData, compressFactor)
-thinV = thinData(vData, compressFactor)
-thinM = thinData(mData, compressFactor)
-
-newP = thinP
-newV = thinV
-newM = thinM
-
-np.save(pathOfFolder + date + '200p-Myr-position',
-        newP)
-np.save(pathOfFolder + date + '200p-Myr-velocity',
-        newV)
-np.save(pathOfFolder + date + '200p-Myr-mass',
-        newM)
-
-
-print('CREATED')
+# print('initializing app')
+#
+# length = 0
+#
+# oldP = np.load(
+#     pathOfInit + date + '200p-Myr-position.npy')
+# oldV = np.load(
+#     pathOfInit + date + '200p-Myr-velocity.npy')
+# oldM = np.load(
+#     pathOfInit + date + '200p-Myr-mass.npy')
+#
+# initialM = oldM[-1]
+# initialP = oldP[-1]
+# initialV = oldV[-1]
+#
+# pData, vData, mData = work(
+#     initialP, initialV, initialM, t, dt, colRad, minParticles)
+#
+# thinP = thinData(pData, compressFactor)
+# thinV = thinData(vData, compressFactor)
+# thinM = thinData(mData, compressFactor)
+#
+# newP = thinP
+# newV = thinV
+# newM = thinM
+#
+# np.save(pathOfFolder + date + '200p-Myr-position',
+#         newP)
+# np.save(pathOfFolder + date + '200p-Myr-velocity',
+#         newV)
+# np.save(pathOfFolder + date + '200p-Myr-mass',
+#         newM)
+#
+#
+# print('CREATED')
 
 pbar = tqdm(total=finalLength)
+length = 0
 oldLength = 0
 
 while length <= finalLength:
