@@ -123,10 +123,16 @@ def App():
 pbar = tqdm(total=finalLength)
 length = 0
 oldLength = 0
+time = []
 
 while length <= finalLength:
-
+    tick = time()
     length = App()
+    tock = time()
+    time.append(tock-tick)
+
+    np.save(pathOfFolder+'times',time)
+
 
     difference = length - oldLength
     oldLength = length
