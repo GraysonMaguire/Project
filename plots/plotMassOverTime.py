@@ -10,7 +10,9 @@ compressFactor = 100
 xUnit = 1000 * 365.25 * 24 * 60 * 60
 effdt = compressFactor * dt / xUnit
 mData1 = np.load(
-    '/Users/garymagnum/Project/data/finalData/16-2-21-200p-Myr-mass.npy')
+    '/Users/grays/Project/Data/finalData2/23-2-21-200p-Myr-mass.npy')
+
+print(mData1[-1])
 # mData2 = np.load(
 #     '/Users/garymagnum/Project/data/12-2-21-2e14BabyCrunch/12-2-21-100p-50por100000yr-10d-2e14-mass.npy')
 # mData3 = np.load(
@@ -31,7 +33,7 @@ def massPlot(mData, color, label):
 
     M0 = totalMassOverTime[0]
 
-    normalisedMassOverTime = totalMassOverTime / M0
+    normalisedMassOverTime = totalMassOverTime*200 / M0
 
     axis.plot(time, normalisedMassOverTime, color=color, label=label)
 
