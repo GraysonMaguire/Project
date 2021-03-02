@@ -1,12 +1,12 @@
 import numpy as np
-from display import Display
-from numba import jit
-from work import Work
-# from numbaWork import work
-from init import Data
-from tqdm import tqdm
-import time
-import os
+# from display import Display
+# from numba import jit
+# from work import Work
+from numbaWork import work
+# from init import Data
+# from tqdm import tqdm
+from time import time
+# import os
 
 normal = np.linalg.norm
 
@@ -16,35 +16,62 @@ G = 6.67e-11
 N = 100
 M0 = 1e32
 R = 1e14
-t = 20000 * 370 * 24 * 60 * 60
+t = 10000 * 370 * 24 * 60 * 60
 dt = 10 * 24 * 60 * 60
 colRad = 1e7
 sunMass = 1e30
 vMax = np.sqrt(2 * G * M0 / R)
 minParticles = 50
+compressFactor = 100
+
 print('loading data')
-P = np.load('/Users/garymagnum/Project/data/9-2-21-9e13Crunch/9-2-21-150p-75por20000yr-10d-90000000000000.0-position.npy')
+P = np.load('/Users/grays/Project/Data/finalData2/23-2-21-200p-Myr-position.npy')
+M = np.load('/Users/grays/Project/Data/finalData2/23-2-21-200p-Myr-mass.npy')
+V = np.load('/Users/grays/Project/Data/finalData2/23-2-21-200p-Myr-velocity.npy')
 print('finished loading')
-M = [0, 0, 0]
 
-E = 0
+def thinData(data, compress):
+    shape = list(np.shape(data))
+    oldLength = shape[0]
 
+    if oldLength <= compress:
+        return data
 
-def reshapeData(data):
-    totalSteps = len(data)
-    Dimensions = len(data[0][0])
-    totalParticles = len(data[0])
+    newLength = int(oldLength / compress)
+    shape[0] = newLength
 
-    newData = np.full((totalParticles, Dimensions, totalSteps), 0.0)
+    newShape = tuple(shape)
 
-    for i in tqdm(range(totalSteps)):
-        for j in range(Dimensions):
-            for k in range(totalParticles):
-                newData[k][j][i] = data[i][k][j]
+    newData = np.full((newShape), 0.0)
+
+    for i in range(newLength):
+        newData[i] = data[i * compress]
 
     return newData
+tick = time()
+initialM = M[-1]
+initialP = P[-1]
+initialV = V[-1]
 
+pData, vData, mData = work(
+    initialP, initialV, initialM, t, dt, colRad, minParticles)
 
-P = reshapeData(P)
-display = Display(P, E, t, dt, M, R)
-display.xyAnimation()
+thinP = thinData(pData, compressFactor)
+thinV = thinData(vData, compressFactor)
+thinM = thinData(mData, compressFactor)
+
+newP = np.concatenate((P[:-1], thinP))
+newV = np.concatenate((V[:-1], thinV))
+newM = np.concatenate((M[:-1], thinM))
+
+# np.save(pathOfFolder + date + '200p-Myr-position',
+#         newP)
+# np.save(pathOfFolder + date + '200p-Myr-velocity',
+#         newV)
+# np.save(pathOfFolder + date + '200p-Myr-mass',
+#         newM)
+
+print('Saved')
+tock = time()
+
+print('time taken: ',tock-tick)
