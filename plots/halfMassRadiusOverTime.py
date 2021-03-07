@@ -6,7 +6,7 @@ from tqdm import tqdm
 normal = np.linalg.norm
 
 plt.rc('font', family='serif')
-plt.style.use('dark_background')
+# plt.style.use('dark_background')
 fig, axis = plt.subplots()
 
 dt = 10 * 24 * 60 * 60
@@ -75,40 +75,19 @@ def halfMassRadiusOverTime(mData, pData, color, label):
     pass
 
 
-# mData1 = np.load(
-#     '/Users/garymagnum/Project/data/19-2-21-e16Crunch/16-2-21-100p-baby-mass.npy')
-# pData1 = np.load(
-#     '/Users/garymagnum/Project/data/19-2-21-e16Crunch/16-2-21-100p-baby-position.npy')
-#
-# mData2 = np.load(
-#     '/Users/garymagnum/Project/data/12-2-21-2e14BabyCrunch/12-2-21-100p-50por100000yr-10d-2e14-mass.npy'
-# )
-# pData2 = np.load(
-#     '/Users/garymagnum/Project/data/12-2-21-2e14BabyCrunch/12-2-21-100p-50por100000yr-10d-2e14-position.npy'
-# )
-# mData3 = np.load(
-#     '/Users/garymagnum/Project/data/13-2-21-1e15BabyCrunch/13-2-21-100p-50por100000yr-10d-1e15-mass.npy')
-# pData3 = np.load(
-#     '/Users/garymagnum/Project/data/13-2-21-1e15BabyCrunch/13-2-21-100p-50por100000yr-10d-1e15-position.npy')
-# mData4 = np.load(
-#     '/Users/garymagnum/Project/data/13-2-21-5e14BabyCrunch/13-2-21-100p-50por100000yr-10d-5e14-mass.npy')
-# pData4 = np.load(
-#     '/Users/garymagnum/Project/data/13-2-21-5e14BabyCrunch/13-2-21-100p-50por100000yr-10d-5e14-position.npy')
-
 P = np.load(
     '/Users/grays/Project/Data/finalData2/23-2-21-200p-Myr-position.npy')
 M = np.load(
     '/Users/grays/Project/Data/finalData2/23-2-21-200p-Myr-mass.npy')
 
-halfMassRadiusOverTime(M, P, 'skyblue', 'collision')
-# halfMassRadiusOverTime(mData2, pData2, 'blue', '1e14m')
-# halfMassRadiusOverTime(mData3, pData3, 'green', '1e15m')
-# halfMassRadiusOverTime(mData4, pData4, 'orange', '5e14m')
+halfMassRadiusOverTime(M, P, 'skyblue', None)
 
 axis.set_xlabel('time/kyr')
 axis.set_ylabel('Half mass radius/pc')
-axis.set_title('Half mass of Globular cluster over time')
+axis.set_xlim(0, 1000)
+axis.axvline(x=84, color='r', linestyle='--', label='collision')
+# axis.set_title('Half mass of Globular cluster over time')
 
 plt.legend()
-plt.savefig('halfMassRadius.png', transparent=True)
+plt.savefig('./saves/halfMassRadius.png')
 plt.show()

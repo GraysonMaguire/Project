@@ -21,7 +21,7 @@ date = '23-2-21-'
 compressFactor = 100
 
 year1000 = 370
-finalLength = 1000 * year1000
+finalLength = 2000 * year1000
 
 
 def thinData(data, compress):
@@ -129,10 +129,9 @@ while length <= finalLength:
     tick = time()
     length = App()
     tock = time()
-    timeArray.append(tock-tick)
+    timeArray.append(tock - tick)
 
-    np.save(pathOfFolder+'times',timeArray)
-
+    np.save(pathOfFolder + 'times', timeArray)
 
     difference = length - oldLength
     oldLength = length

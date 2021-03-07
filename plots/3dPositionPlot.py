@@ -8,7 +8,8 @@ from tqdm import tqdm
 pRaw = 0
 plummerRadius = 9e13
 path = '/Users/garymagnum/Project/hamData/23-2-21-200p-Myr-position.npy'
-pData = np.load(path, allow_pickle=True)[0]
+pData = np.load(
+    '/Users/grays/Project/hamData/23-2-21-200p-Myr-position.npy')[0]
 print(np.shape(pData))
 R = 1e17
 

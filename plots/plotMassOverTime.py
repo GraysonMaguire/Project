@@ -12,17 +12,9 @@ effdt = compressFactor * dt / xUnit
 mData1 = np.load(
     '/Users/grays/Project/Data/finalData2/23-2-21-200p-Myr-mass.npy')
 
-print(mData1[-1])
-# mData2 = np.load(
-#     '/Users/garymagnum/Project/data/12-2-21-2e14BabyCrunch/12-2-21-100p-50por100000yr-10d-2e14-mass.npy')
-# mData3 = np.load(
-#     '/Users/garymagnum/Project/data/13-2-21-1e15BabyCrunch/13-2-21-100p-50por100000yr-10d-1e15-mass.npy')
-# mData4 = np.load(
-#     '/Users/garymagnum/Project/data/13-2-21-5e14BabyCrunch/13-2-21-100p-50por100000yr-10d-5e14-mass.npy')
-
 
 plt.rc('font', family='serif', weight='bold', size='18')
-plt.style.use('dark_background')
+# plt.style.use('dark_background')
 
 fig, axis = plt.subplots(figsize=(8, 4))
 
@@ -33,24 +25,24 @@ def massPlot(mData, color, label):
 
     M0 = totalMassOverTime[0]
 
-    normalisedMassOverTime = totalMassOverTime*200 / M0
+    normalisedMassOverTime = totalMassOverTime * 200 / M0
 
     axis.plot(time, normalisedMassOverTime, color=color, label=label)
 
     pass
 
 
-massPlot(mData1, 'deepskyblue', 'collision')
+massPlot(mData1, 'deepskyblue', None)
 
 
 axis.set_xlabel('time/kyr')
 axis.set_ylabel('Total mass of cluster/M0')
-
-# axis.set_title('Mass of Globular cluster over time')
 axis.set_xlim(0, 1000)
+axis.set_ylim(0, 205)
+axis.axvline(x=84, color='r', linestyle='--', label='collision')
 
 axis.legend()
 plt.tight_layout()
 
-plt.savefig('massOverTime.png', transparent=True)
+plt.savefig('./saves/massOverTime.png')
 plt.show()
