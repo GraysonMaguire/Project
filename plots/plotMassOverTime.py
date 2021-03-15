@@ -1,5 +1,7 @@
 from matplotlib import pyplot as plt
 from matplotlib import animation
+import matplotlib
+
 import numpy as np
 from tqdm import tqdm
 # verbose functions
@@ -13,10 +15,13 @@ mData1 = np.load(
     '/Users/grays/Project/Data/finalData2/23-2-21-200p-Myr-mass.npy')
 
 
-plt.rc('font', family='serif', weight='bold', size='18')
+plt.rc('font', family='serif', size='12')
 # plt.style.use('dark_background')
+fig, axis = plt.subplots(figsize=(8, 4), dpi=400)
 
-fig, axis = plt.subplots(figsize=(8, 4))
+matplotlib.rcParams['mathtext.fontset'] = 'stix'
+matplotlib.rcParams['font.family'] = 'STIXGeneral'
+plt.rcParams.update({'font.size': 16})
 
 
 def massPlot(mData, color, label):
@@ -32,17 +37,17 @@ def massPlot(mData, color, label):
     pass
 
 
-massPlot(mData1, 'deepskyblue', None)
+massPlot(mData1, 'darkturquoise', None)
 
 
 axis.set_xlabel('time/kyr')
 axis.set_ylabel('Total mass of cluster/M0')
-axis.set_xlim(0, 1000)
+axis.set_xlim(0, 2000)
 axis.set_ylim(0, 205)
-axis.axvline(x=84, color='r', linestyle='--', label='collision')
+axis.axvline(x=84, color='deeppink', linestyle='--', label='collision')
 
 axis.legend()
 plt.tight_layout()
 
 plt.savefig('./saves/massOverTime.png')
-plt.show()
+# plt.show()
