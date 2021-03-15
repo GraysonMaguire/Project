@@ -130,9 +130,9 @@ def coreRadiusOverTime(mData, pData, color, label, nBins):
 
 
 P = np.load(
-    './finalData2/23-2-21-200p-Myr-position.npy')
+    './finalData2/23-2-21-200p-Myr-position.npy', allow_pickle=True)
 M = np.load(
-    './finalData2/23-2-21-200p-Myr-mass.npy')
+    './finalData2/23-2-21-200p-Myr-mass.npy', allow_pickle=True)
 
 
 coreRadiusOverTime(M, P, 'darkturquoise', '6000', 6000)
